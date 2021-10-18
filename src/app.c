@@ -71,9 +71,7 @@ int main(int argc, char *argv[])
     todo->panel = new_panel(todo->win);
 
     // Fabricating todo list entries
-    ENTRY *entries = entry_create("Do homework");
-    todo_insert(&entries, entry_create("Work on thesis"));
-    todo_insert(&entries, entry_create("TODO project progress"));
+    ENTRY *entries = entry_fromFile("entries.txt");
 
     // Printing the title
     char *title = "TODO List Manager v0.1";
@@ -85,15 +83,6 @@ int main(int argc, char *argv[])
     // Drawing the list of entries
     draw_entries(todo, entries);
 
-    // Refresh virtual and physical windows
-    wnoutrefresh(stdscr);
-    wnoutrefresh(todo->win);
-    doupdate();
-
-    // Removing an entry
-    todo_remove(&entries, "Do homework");
-    // Drawing the list of entries
-    draw_entries(todo, entries);
     // Refresh virtual and physical windows
     wnoutrefresh(stdscr);
     wnoutrefresh(todo->win);
