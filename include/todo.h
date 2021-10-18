@@ -15,5 +15,8 @@ ENTRY*  entry_fromFile(char *filename);
 void    entry_free(ENTRY *head);
 void    todo_insert(ENTRY **head, ENTRY *e);
 void    todo_remove(ENTRY **head, char *name);
+ENTRY*  todo_find(ENTRY *head, char*name);
+char*   entry_toString(ENTRY *e);
+void    entry_toFile(ENTRY *head, char *filename);
 
 #endif
