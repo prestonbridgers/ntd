@@ -23,4 +23,4 @@ clean:
 	rm $(OBJDIR)/* $(BINDIR)/*
 
 run:
-	@./$(BINDIR)/$(BIN)
+	@./$(BINDIR)/$(BIN) 2> err.log
