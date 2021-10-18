@@ -24,3 +24,6 @@ clean:
 
 run:
 	@./$(BINDIR)/$(BIN) 2> err.log
+
+memtest:
+	@valgrind --leak-check=yes ./$(BINDIR)/$(BIN) 2> err.log
