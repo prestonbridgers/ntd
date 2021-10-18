@@ -10,7 +10,8 @@ typedef struct ENTRY_T
     struct ENTRY_T *next;
 } ENTRY;
 
-ENTRY*  entry_create(char *name);
+ENTRY*  entry_create(char *name, short isDone);
+ENTRY*  entry_fromFile(char *filename);
 void    entry_free(ENTRY *head);
 void    todo_insert(ENTRY **head, ENTRY *e);
 void    todo_remove(ENTRY **head, char *name);

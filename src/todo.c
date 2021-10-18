@@ -4,13 +4,38 @@
 
 #include "todo.h"
 
-ENTRY *entry_create(char *name)
+ENTRY *entry_create(char *name, short isDone)
 {
     ENTRY *entry = (ENTRY*) malloc(sizeof(*entry));
     strncpy(entry->name, name, MAX_ENTRY_NAME_SIZE);
-    entry->isDone = 0;
+    entry->isDone = isDone;
     entry->next = NULL;
     return entry;
+}
+
+ENTRY *entry_fromFile(char *filename)
+{
+    char line[MAX_ENTRY_NAME_SIZE];
+    FILE *file = fopen(filename, "r");
+    char *entry_name;
+    short entry_isDone;
+    ENTRY *entries = 0;
+
+    while(fgets(line, MAX_ENTRY_NAME_SIZE, file) != NULL)
+    {
+        entry_name = strtok(line, "|");
+        if (strcmp(strtok(NULL, "|"), "complete\n") == 0)
+            entry_isDone = 1;
+        else
+            entry_isDone = 0;
+
+        fprintf(stderr, "Entry name: %s\n", entry_name);
+        fprintf(stderr, "Entry is  : %d\n", entry_isDone);
+
+        todo_insert(&entries, entry_create(entry_name, entry_isDone));
+    }
+    fclose(file);
+    return entries;
 }
 
 void todo_insert(ENTRY **head, ENTRY *e)

@@ -1,0 +1,4 @@
+This is an entry|complete
+This is another entry|complete
+Do Homework|incomplete
+Go to advising|complete
