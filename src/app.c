@@ -25,6 +25,31 @@ void draw_window(MY_WINDOW *arg)
     return;
 }
 
+void draw_entries(MY_WINDOW *arg, ENTRY *head)
+{
+    int xpos = 1;
+    int ypos = 1;
+    char entry_str[MAX_ENTRY_NAME_SIZE];
+    ENTRY *cur;
+
+    werase(arg->win);
+    for (cur = head; cur != NULL; cur = cur->next)
+    {
+        if (cur->isDone)
+            strncpy(entry_str, "[x] ", MAX_ENTRY_NAME_SIZE);
+        else
+            strncpy(entry_str, "[ ] ", MAX_ENTRY_NAME_SIZE);
+
+        strncat(entry_str, cur->name, MAX_ENTRY_NAME_SIZE - 5);
+        mvwaddstr(arg->win, ypos, xpos, entry_str);
+        ypos++;
+    }
+
+    // NOTE: May not need this
+    box(arg->win, '|', '-');
+    return;
+}
+
 int main(int argc, char *argv[])
 {
     initscr();
@@ -40,9 +65,15 @@ int main(int argc, char *argv[])
     todo->width       = COLS - 2;
     todo->height      = LINES - 3;
     todo->xpos = (COLS / 2) - (todo->width / 2);
-    todo->ypos = (LINES / 2) - (todo->height / 2);
+    todo->ypos = (LINES / 2) - (todo->height / 2) + 1;
     todo->win = newwin(todo->height, todo->width,
                        todo->ypos, todo->xpos);
+    todo->panel = new_panel(todo->win);
+
+    // Fabricating todo list entries
+    ENTRY *entries = entry_create("Do homework");
+    todo_insert(&entries, entry_create("Work on thesis"));
+    todo_insert(&entries, entry_create("TODO project progress"));
 
     // Printing the title
     char *title = "TODO List Manager v0.1";
@@ -51,12 +82,29 @@ int main(int argc, char *argv[])
     // Drawing the todo window
     draw_window(todo);
 
+    // Drawing the list of entries
+    draw_entries(todo, entries);
+
+    // Refresh virtual and physical windows
+    wnoutrefresh(stdscr);
+    wnoutrefresh(todo->win);
+    doupdate();
+
+    // Removing an entry
+    todo_remove(&entries, "Do homework");
+    // Drawing the list of entries
+    draw_entries(todo, entries);
     // Refresh virtual and physical windows
     wnoutrefresh(stdscr);
     wnoutrefresh(todo->win);
     doupdate();
 
     getch();
+
+    del_panel(todo->panel);
+    delwin(todo->win);
+    free(todo);
+    entry_free(entries);
     endwin();
 	return EXIT_SUCCESS;	
 }
