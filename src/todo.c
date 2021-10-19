@@ -10,6 +10,9 @@ ENTRY *entry_create(char *name, short isDone)
     strncpy(entry->name, name, MAX_ENTRY_NAME_SIZE);
     entry->isDone = isDone;
     entry->next = NULL;
+
+    fprintf(stderr, "Created entry: %s\n", entry->name);
+
     return entry;
 }
 

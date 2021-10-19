@@ -2,53 +2,10 @@
 #include <stdlib.h>
 #include <curses.h>
 #include <panel.h>
+#include <form.h>
 #include <string.h>
 
 #include "todo.h"
-
-typedef struct
-{
-    WINDOW *win;
-    PANEL *panel;
-    char *name;
-    int width;
-    int height;
-    int xpos;
-    int ypos;
-} MY_WINDOW;
-
-void draw_window(MY_WINDOW *arg)
-{
-    box(arg->win, '|', '-');
-    mvwaddstr(arg->win, 0, (arg->width / 2) - (strlen(arg->name) / 2),
-              arg->name);
-    return;
-}
-
-void draw_entries(MY_WINDOW *arg, ENTRY *head)
-{
-    int xpos = 1;
-    int ypos = 1;
-    char entry_str[MAX_ENTRY_NAME_SIZE];
-    ENTRY *cur;
-
-    werase(arg->win);
-    for (cur = head; cur != NULL; cur = cur->next)
-    {
-        if (cur->isDone)
-            strncpy(entry_str, "[x] ", MAX_ENTRY_NAME_SIZE);
-        else
-            strncpy(entry_str, "[ ] ", MAX_ENTRY_NAME_SIZE);
-
-        strncat(entry_str, cur->name, MAX_ENTRY_NAME_SIZE - 5);
-        mvwaddstr(arg->win, ypos, xpos, entry_str);
-        ypos++;
-    }
-
-    // NOTE: May not need this
-    box(arg->win, '|', '-');
-    return;
-}
 
 int main(int argc, char *argv[])
 {
@@ -57,38 +14,103 @@ int main(int argc, char *argv[])
     noecho();
     curs_set(0);
 
-    fprintf(stderr, "COLS : %d\n", COLS);
-    fprintf(stderr, "LINES: %d\n", LINES);
+    ENTRY *entries;
+    MY_WINDOW *todo;
+    MY_WINDOW *add_form_window; // The window that stores the add form
+    char *title = "TODO List Manager v0.1";
 
-    MY_WINDOW *todo = (MY_WINDOW*) malloc(sizeof(*todo));
-    todo->name = "TODO Items";
-    todo->width       = COLS - 2;
-    todo->height      = LINES - 3;
-    todo->xpos = (COLS / 2) - (todo->width / 2);
-    todo->ypos = (LINES / 2) - (todo->height / 2) + 1;
-    todo->win = newwin(todo->height, todo->width,
-                       todo->ypos, todo->xpos);
-    todo->panel = new_panel(todo->win);
+    // Initializing the windows
+    add_form_window = init_addFormWindow();
+    todo = init_todoWindow();
+    update_panels();
 
     // Fabricating todo list entries
-    ENTRY *entries = entry_fromFile("entries.txt");
+    entries = entry_fromFile("entries.txt");
+
+    // Test trimwhitespace
+    char *meme = "     this is a whitespaced meme       ";
+    char *after = trim_whitespaces(meme);
+    fprintf(stderr, "testing whitespaces\n");
+    fprintf(stderr, "before whitespace: %s\n", meme);
+    fprintf(stderr, "after whitespace : %s\n", after);
 
     // Printing the title
-    char *title = "TODO List Manager v0.1";
     mvprintw(0, (COLS / 2) - (strlen(title) / 2), title);
 
     // Drawing the todo window
+    draw_addForm(add_form_window);
     draw_window(todo);
-
     // Drawing the list of entries
     draw_entries(todo, entries);
-
     // Refresh virtual and physical windows
-    wnoutrefresh(stdscr);
-    wnoutrefresh(todo->win);
+    update_panels();
     doupdate();
 
-    getch();
+    char c;
+    while ((c = getch()) != 'q')
+    {
+
+        switch (c)
+        {
+            case 'a': // Add an item
+                top_panel(add_form_window->panel);
+                update_panels();
+                doupdate();
+                curs_set(1);
+                // Enter form input loop
+                int f;
+                int done = 0;
+                while (!done)
+                {
+                    f = wgetch(add_form_window->win);
+                    switch (f)
+                    {
+                        case 10: // ENTER
+                            fprintf(stderr, "User pressed ENTER in the form\n");
+                            // ADD ENTRY TO THE LIST HERE
+                            //FIELD **fields = form_fields(add_form_window->form);
+                            char *field_buf = field_buffer(add_form_window->fields[0], 0);
+                            char *field_buf_trimmed = trim_whitespaces(field_buf);
+
+                            fprintf(stderr, "field_buf: %s\n", field_buf);
+                            fprintf(stderr, "field_buf_trimmed: %s\n", field_buf_trimmed);
+
+                            todo_insert(&entries, entry_create(field_buf_trimmed, 0));
+                            top_panel(todo->panel);
+                            form_driver(add_form_window->form, REQ_CLR_FIELD);
+                            done = 1;
+                            break;
+                        case KEY_BACKSPACE: //BACKSPACE
+                            fprintf(stderr, "User pressed BACKSPACE in the form\n");
+                            form_driver(add_form_window->form, REQ_DEL_PREV);
+                            break;
+                        default:
+                            form_driver(add_form_window->form, f);
+                            break;
+                    }
+                    update_panels();
+                    doupdate();
+                }
+                curs_set(0);
+                break;
+            case 'd': // Delete an item
+                top_panel(todo->panel);
+                break;
+            default:
+                break;
+        }
+
+        // Drawing the todo window
+        draw_addForm(add_form_window);
+        draw_window(todo);
+
+        // Drawing the list of entries
+        draw_entries(todo, entries);
+
+        // Refresh virtual and physical windows
+        update_panels();
+        doupdate();
+    }
 
     del_panel(todo->panel);
     delwin(todo->win);

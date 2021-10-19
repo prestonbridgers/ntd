@@ -1,7 +1,7 @@
 
 CC=gcc
 CFLAGS=-g -Wall -Iinclude
-LFLAGS=-lcurses -lpanel
+LFLAGS=-lpanel -lform -lcurses
 
 SRCDIR=src
 OBJDIR=obj
