@@ -1,6 +1,0 @@
-Go to doctor appointment|complete
-Attend company meeting|complete
-Do Homework|incomplete
-Go to advising|complete
-Make dinner plans|incomplete
-Lab TA at 3pm Wednesday|incomplete
