@@ -8,6 +8,51 @@
 
 #include "todo.h"
 
+void form_add(MY_WINDOW *arg, ENTRY **entries)
+{
+    top_panel(arg->panel);
+    update_panels();
+    doupdate();
+    curs_set(1);
+
+    // Enter form input loop
+    int f;
+    int done = 0;
+    while (!done)
+    {
+        f = wgetch(arg->win);
+        switch (f)
+        {
+            case 10: // ENTER
+                // sync the field buffer with what's displayed
+                form_driver(arg->form, REQ_NEXT_FIELD);
+                form_driver(arg->form, REQ_PREV_FIELD);
+                // ADD ENTRY TO THE LIST HERE
+                //FIELD **fields = form_fields(arg->form);
+                char *field_buf = field_buffer(arg->fields[0], 0);
+                char *field_buf_trimmed = trim_whitespaces(field_buf);
+
+                todo_insert(entries, entry_create(field_buf_trimmed, 0));
+                form_driver(arg->form, REQ_CLR_FIELD);
+                done = 1;
+                break;
+            case KEY_BACKSPACE:
+                form_driver(arg->form, REQ_DEL_PREV);
+                break;
+            case KEY_LEFT:
+                form_driver(arg->form, REQ_PREV_CHAR);
+                break;
+            case KEY_RIGHT:
+                form_driver(arg->form, REQ_NEXT_CHAR);
+                break;
+            default:
+                form_driver(arg->form, f);
+                break;
+        }
+    }
+    curs_set(1);
+}
+
 // This is broken I think
 char* trim_whitespaces(char *str)
 {
@@ -27,8 +72,7 @@ char* trim_whitespaces(char *str)
         end--;
 
     // write new null terminator
-    end++;
-    *(end) = '\0';
+    *(end+1) = '\0';
 
     return str;
 }
@@ -45,6 +89,8 @@ MY_WINDOW *init_addFormWindow()
     fields = (FIELD**) malloc(2 * sizeof(*fields));
     fields[0] = new_field(1, 30, 1, 1, 0, 0);
     fields[1] = NULL;
+
+    set_field_opts(fields[0], O_VISIBLE | O_PUBLIC | O_EDIT | O_ACTIVE);
 
     // Creating the form
     form = new_form(fields);

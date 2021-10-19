@@ -43,5 +43,6 @@ void draw_window(MY_WINDOW *arg);
 void draw_addForm(MY_WINDOW *arg);
 void draw_entries(MY_WINDOW *arg, ENTRY *head);
 char* trim_whitespaces(char *str);
+void form_add(MY_WINDOW *arg, ENTRY **entries);
 
 #endif

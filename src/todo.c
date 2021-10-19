@@ -19,10 +19,19 @@ ENTRY *entry_create(char *name, short isDone)
 ENTRY *entry_fromFile(char *filename)
 {
     char line[MAX_ENTRY_NAME_SIZE];
-    FILE *file = fopen(filename, "r");
+    FILE *file;
     char *entry_name;
     short entry_isDone;
     ENTRY *entries = 0;
+
+    file = fopen(filename, "r");
+    if (file == NULL)
+    {
+        fprintf(stderr, "File %s does not exist, creating it...\n", filename);
+        file = fopen(filename, "w");
+        fclose(file);
+        return NULL;
+    }
 
     while(fgets(line, MAX_ENTRY_NAME_SIZE, file) != NULL)
     {
