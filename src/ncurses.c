@@ -8,7 +8,7 @@
 
 #include "todo.h"
 
-void form_add(MY_WINDOW *arg, ENTRY **entries)
+void form_handle(MY_WINDOW *arg, ENTRY **entries, short action)
 {
     if (arg == NULL)
     {
@@ -43,8 +43,10 @@ void form_add(MY_WINDOW *arg, ENTRY **entries)
                 //FIELD **fields = form_fields(arg->form);
                 char *field_buf = field_buffer(arg->fields[0], 0);
                 char *field_buf_trimmed = trim_whitespaces(field_buf);
-
-                todo_insert(entries, entry_create(field_buf_trimmed, 0));
+                if (action == ENTRY_DELETE)
+                    entry_remove(entries, field_buf_trimmed);
+                if (action == ENTRY_INSERT)
+                    entry_insert(entries, entry_create(field_buf_trimmed, 0));
                 form_driver(arg->form, REQ_CLR_FIELD);
                 done = 1;
                 break;
@@ -104,7 +106,7 @@ MY_WINDOW *init_addFormWindow()
 
     // Initializing the fields
     fields = (FIELD**) malloc(2 * sizeof(*fields));
-    fields[0] = new_field(1, 30, 1, 1, 0, 0);
+    fields[0] = new_field(1, 30, 0, 0, 0, 0);
     fields[1] = NULL;
 
     set_field_opts(fields[0], O_VISIBLE | O_PUBLIC | O_EDIT | O_ACTIVE);
@@ -156,7 +158,7 @@ MY_WINDOW *init_todoWindow()
     MY_WINDOW *todo = (MY_WINDOW*) malloc(sizeof(*todo));
     todo->name      = "TODO Items";
     todo->width     = COLS - 2;
-    todo->height    = LINES - 3;
+    todo->height    = LINES - 2;
     todo->xpos      = (COLS / 2) - (todo->width / 2);
     todo->ypos      = (LINES / 2) - (todo->height / 2) + 1;
     todo->win       = newwin(todo->height, todo->width,
@@ -185,11 +187,6 @@ void draw_entries(MY_WINDOW *arg, ENTRY *head)
     if (arg == NULL)
     {
         fprintf(stderr, "draw_entries: arg == NULL");
-        exit(1);
-    }
-    if (head == NULL)
-    {
-        fprintf(stderr, "draw_entries: head == NULL");
         exit(1);
     }
     int xpos = 1;

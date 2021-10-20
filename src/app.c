@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
     draw_window(todo);
     // Drawing the list of entries
     draw_entries(todo, entries);
+    fprintf(stderr, "1\n");
     // Refresh virtual and physical windows
     update_panels();
     doupdate();
@@ -46,10 +47,11 @@ int main(int argc, char *argv[])
         switch (c)
         {
             case 'a': // Add an item
-                form_add(add_form_window, &entries);
+                form_handle(add_form_window, &entries, ENTRY_INSERT);
                 top_panel(todo->panel);
                 break;
             case 'd': // Delete an item
+                form_handle(add_form_window, &entries, ENTRY_DELETE);
                 top_panel(todo->panel);
                 break;
             default:
@@ -62,6 +64,7 @@ int main(int argc, char *argv[])
 
         // Drawing the list of entries
         draw_entries(todo, entries);
+        fprintf(stderr, "2\n");
 
         // Refresh virtual and physical windows
         update_panels();

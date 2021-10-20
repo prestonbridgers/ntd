@@ -55,7 +55,7 @@ ENTRY *entry_fromFile(char *filename)
         fprintf(stderr, "Entry name: %s\n", entry_name);
         fprintf(stderr, "Entry is  : %d\n", entry_isDone);
 
-        todo_insert(&entries, entry_create(entry_name, entry_isDone));
+        entry_insert(&entries, entry_create(entry_name, entry_isDone));
     }
     fclose(file);
     return entries;
@@ -68,11 +68,7 @@ void entry_toFile(ENTRY *head, char *filename)
         fprintf(stderr, "entry_toFile: filename == null\n");
         exit(1);
     }
-    if (head == NULL)
-    {
-        fprintf(stderr, "entry_toFile: head == null\n");
-        exit(1);
-    }
+
     FILE *file = fopen(filename, "w");
     ENTRY *tmp = head;
 
@@ -91,16 +87,16 @@ void entry_toFile(ENTRY *head, char *filename)
     return;
 }
 
-ENTRY *todo_find(ENTRY *head, char *name)
+ENTRY *entry_find(ENTRY *head, char *name)
 {
     if (name == NULL)
     {
-        fprintf(stderr, "todo_find: name == null\n");
+        fprintf(stderr, "entry_find: name == null\n");
         exit(1);
     }
     if (head == NULL)
     {
-        fprintf(stderr, "todo_find: head == null\n");
+        fprintf(stderr, "entry_find: head == null\n");
         exit(1);
     }
     // Return null on the empty list
@@ -118,16 +114,16 @@ ENTRY *todo_find(ENTRY *head, char *name)
     return NULL;
 }
 
-void todo_insert(ENTRY **head, ENTRY *e)
+void entry_insert(ENTRY **head, ENTRY *e)
 {
     if (e == NULL)
     {
-        fprintf(stderr, "todo_insert: e == null\n");
+        fprintf(stderr, "entry_insert: e == null\n");
         exit(1);
     }
     if (head == NULL)
     {
-        fprintf(stderr, "todo_find: head == null\n");
+        fprintf(stderr, "entry_insert: head == null\n");
         exit(1);
     }
 
@@ -135,20 +131,27 @@ void todo_insert(ENTRY **head, ENTRY *e)
     *head = e;
 }
 
-void todo_remove(ENTRY **head, char *name)
+void entry_remove(ENTRY **head, char *name)
 {
     if (name == NULL)
     {
-        fprintf(stderr, "todo_remove: name == null\n");
+        fprintf(stderr, "entry_remove: name == null\n");
         exit(1);
     }
     if (head == NULL)
     {
-        fprintf(stderr, "todo_remove: head == null\n");
+        fprintf(stderr, "entry_remove: head == null\n");
         exit(1);
     }
-    ENTRY *prev;
+    ENTRY *prev = NULL;
     ENTRY *target = *head;
+
+    if (strcmp(target->name, name) == 0)
+    {
+        *head = NULL;
+        free(target);
+        return;
+    }
 
     while (target != NULL)
     {
@@ -190,8 +193,7 @@ void entry_free(ENTRY *head)
 {
     if (head == NULL)
     {
-        fprintf(stderr, "entry_free: head == NULL\n");
-        exit(1);
+        return;
     }
     ENTRY *tmp;
     while (head != NULL)

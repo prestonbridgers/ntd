@@ -7,6 +7,9 @@
 
 #define MAX_ENTRY_NAME_SIZE 128
 
+#define ENTRY_INSERT 0
+#define ENTRY_DELETE 1
+
 typedef struct
 {
     WINDOW *win;
@@ -30,9 +33,9 @@ typedef struct ENTRY_T
 ENTRY*  entry_create(char *name, short isDone);
 ENTRY*  entry_fromFile(char *filename);
 void    entry_free(ENTRY *head);
-void    todo_insert(ENTRY **head, ENTRY *e);
-void    todo_remove(ENTRY **head, char *name);
-ENTRY*  todo_find(ENTRY *head, char*name);
+void    entry_insert(ENTRY **head, ENTRY *e);
+void    entry_remove(ENTRY **head, char *name);
+ENTRY*  entry_find(ENTRY *head, char*name);
 char*   entry_toString(ENTRY *e);
 void    entry_toFile(ENTRY *head, char *filename);
 
@@ -43,6 +46,6 @@ void draw_window(MY_WINDOW *arg);
 void draw_addForm(MY_WINDOW *arg);
 void draw_entries(MY_WINDOW *arg, ENTRY *head);
 char* trim_whitespaces(char *str);
-void form_add(MY_WINDOW *arg, ENTRY **entries);
+void form_handle(MY_WINDOW *arg, ENTRY **entries, short action);
 
 #endif
