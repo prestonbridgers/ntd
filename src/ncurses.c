@@ -64,7 +64,8 @@ void form_handle(MY_WINDOW *arg, ENTRY **entries, short action)
                 break;
         }
     }
-    curs_set(1);
+    curs_set(0);
+    return;
 }
 
 // This is broken I think
