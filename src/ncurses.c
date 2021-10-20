@@ -161,7 +161,7 @@ MY_WINDOW *init_todoWindow()
     todo->width     = COLS - 2;
     todo->height    = LINES - 2;
     todo->xpos      = (COLS / 2) - (todo->width / 2);
-    todo->ypos      = (LINES / 2) - (todo->height / 2) + 1;
+    todo->ypos      = 1;
     todo->win       = newwin(todo->height, todo->width,
                              todo->ypos, todo->xpos);
     todo->panel     = new_panel(todo->win);

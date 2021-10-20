@@ -19,6 +19,12 @@ int main(int argc, char *argv[])
     MY_WINDOW *todo;
     MY_WINDOW *add_form_window; // The window that stores the add form
     char *title = "TODO List Manager v0.1";
+    char *footer = "'a' and 'd' to add/delete an entry";
+
+    // Starting colors and initializing color pairs
+    if (has_colors())
+        start_color();
+    init_pair(1, COLOR_CYAN, COLOR_BLACK);
 
     // Initializing the windows
     add_form_window = init_addFormWindow();
@@ -28,8 +34,13 @@ int main(int argc, char *argv[])
     // Fabricating todo list entries
     entries = entry_fromFile("entries.txt");
 
-    // Printing the title
+    // Printing the title and footer
     mvprintw(0, (COLS / 2) - (strlen(title) / 2), title);
+    mvprintw(LINES - 1, 1, footer);
+
+    // Coloring the title and footer
+    mvchgat(0, 0, -1, A_BOLD, 1, NULL);
+    mvchgat(LINES - 1, 0, -1, A_BOLD, 1, NULL);
 
     // Drawing the todo window
     draw_addForm(add_form_window);
