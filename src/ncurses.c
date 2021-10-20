@@ -10,6 +10,18 @@
 
 void form_add(MY_WINDOW *arg, ENTRY **entries)
 {
+    if (arg == NULL)
+    {
+        fprintf(stderr, "form_add: arg == NULL\n");
+        exit(1);
+    }
+
+    if (entries == NULL)
+    {   
+        fprintf(stderr, "form_add: entries == NULL\n");
+        exit(1);
+    }
+
     top_panel(arg->panel);
     update_panels();
     doupdate();
@@ -56,6 +68,11 @@ void form_add(MY_WINDOW *arg, ENTRY **entries)
 // This is broken I think
 char* trim_whitespaces(char *str)
 {
+    if (str == NULL)
+    {
+        fprintf(stderr, "trim_whitespace: NULL string\n");
+        exit(1);
+    }
     char *end;
 
     //trim leading space
@@ -123,6 +140,11 @@ MY_WINDOW *init_addFormWindow()
 
 void draw_addForm(MY_WINDOW *arg)
 {
+    if (arg == NULL)
+    {
+        fprintf(stderr, "draw_addForm: arg == NULL");
+        exit(1);
+    }
     box(arg->win, 0, 0);
     mvwaddstr(arg->win, 0, (arg->width / 2) - (strlen(arg->name) / 2), arg->name);
     post_form(arg->form);
@@ -147,6 +169,11 @@ MY_WINDOW *init_todoWindow()
 
 void draw_window(MY_WINDOW *arg)
 {
+    if (arg == NULL)
+    {
+        fprintf(stderr, "draw_window: arg == NULL");
+        exit(1);
+    }
     box(arg->win, '|', '-');
     mvwaddstr(arg->win, 0, (arg->width / 2) - (strlen(arg->name) / 2),
               arg->name);
@@ -155,6 +182,16 @@ void draw_window(MY_WINDOW *arg)
 
 void draw_entries(MY_WINDOW *arg, ENTRY *head)
 {
+    if (arg == NULL)
+    {
+        fprintf(stderr, "draw_entries: arg == NULL");
+        exit(1);
+    }
+    if (head == NULL)
+    {
+        fprintf(stderr, "draw_entries: head == NULL");
+        exit(1);
+    }
     int xpos = 1;
     int ypos = 1;
     char entry_str[MAX_ENTRY_NAME_SIZE];

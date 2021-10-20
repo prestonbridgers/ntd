@@ -6,6 +6,12 @@
 
 ENTRY *entry_create(char *name, short isDone)
 {
+    if (name == NULL)
+    {
+        fprintf(stderr, "entry_create: name == null\n");
+        exit(1);
+    }
+
     ENTRY *entry = (ENTRY*) malloc(sizeof(*entry));
     strncpy(entry->name, name, MAX_ENTRY_NAME_SIZE);
     entry->isDone = isDone;
@@ -18,6 +24,11 @@ ENTRY *entry_create(char *name, short isDone)
 
 ENTRY *entry_fromFile(char *filename)
 {
+    if (filename == NULL)
+    {
+        fprintf(stderr, "entry_fromFile: filename == null\n");
+        exit(1);
+    }
     char line[MAX_ENTRY_NAME_SIZE];
     FILE *file;
     char *entry_name;
@@ -52,6 +63,16 @@ ENTRY *entry_fromFile(char *filename)
 
 void entry_toFile(ENTRY *head, char *filename)
 {
+    if (filename == NULL)
+    {
+        fprintf(stderr, "entry_toFile: filename == null\n");
+        exit(1);
+    }
+    if (head == NULL)
+    {
+        fprintf(stderr, "entry_toFile: head == null\n");
+        exit(1);
+    }
     FILE *file = fopen(filename, "w");
     ENTRY *tmp = head;
 
@@ -72,6 +93,16 @@ void entry_toFile(ENTRY *head, char *filename)
 
 ENTRY *todo_find(ENTRY *head, char *name)
 {
+    if (name == NULL)
+    {
+        fprintf(stderr, "todo_find: name == null\n");
+        exit(1);
+    }
+    if (head == NULL)
+    {
+        fprintf(stderr, "todo_find: head == null\n");
+        exit(1);
+    }
     // Return null on the empty list
     if (head == NULL)
         return NULL;
@@ -89,12 +120,33 @@ ENTRY *todo_find(ENTRY *head, char *name)
 
 void todo_insert(ENTRY **head, ENTRY *e)
 {
+    if (e == NULL)
+    {
+        fprintf(stderr, "todo_insert: e == null\n");
+        exit(1);
+    }
+    if (head == NULL)
+    {
+        fprintf(stderr, "todo_find: head == null\n");
+        exit(1);
+    }
+
     e->next = *head;
     *head = e;
 }
 
 void todo_remove(ENTRY **head, char *name)
 {
+    if (name == NULL)
+    {
+        fprintf(stderr, "todo_remove: name == null\n");
+        exit(1);
+    }
+    if (head == NULL)
+    {
+        fprintf(stderr, "todo_remove: head == null\n");
+        exit(1);
+    }
     ENTRY *prev;
     ENTRY *target = *head;
 
@@ -116,6 +168,11 @@ void todo_remove(ENTRY **head, char *name)
 
 char *entry_toString(ENTRY *e)
 {
+    if (e == NULL)
+    {
+        fprintf(stderr, "entry_toString: e == NULL\n");
+        exit(1);
+    }
     char *str = (char*) malloc(1024 * sizeof(*str));
     if (e == NULL)
         return "";
@@ -131,6 +188,11 @@ char *entry_toString(ENTRY *e)
 
 void entry_free(ENTRY *head)
 {
+    if (head == NULL)
+    {
+        fprintf(stderr, "entry_free: head == NULL\n");
+        exit(1);
+    }
     ENTRY *tmp;
     while (head != NULL)
     {
