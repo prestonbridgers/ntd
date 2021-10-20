@@ -94,11 +94,6 @@ ENTRY *entry_find(ENTRY *head, char *name)
         fprintf(stderr, "entry_find: name == null\n");
         exit(1);
     }
-    if (head == NULL)
-    {
-        fprintf(stderr, "entry_find: head == null\n");
-        exit(1);
-    }
     // Return null on the empty list
     if (head == NULL)
         return NULL;
@@ -106,12 +101,22 @@ ENTRY *entry_find(ENTRY *head, char *name)
     ENTRY *tmp = head;
     for (tmp = head; tmp != NULL; tmp = tmp->next)
     {
-        if (strcmp(tmp->name, name))
+        if (strcmp(tmp->name, name) == 0)
         {
             return tmp;
         }
     }
     return NULL;
+}
+
+void entry_mark(ENTRY **head, char *name)
+{
+    ENTRY *target = entry_find(*head, name);
+    fprintf(stderr, "Searching %s found %s\n", name, target->name);
+    if (target == NULL)
+        return;
+    target->isDone = !(target->isDone);
+    return;
 }
 
 void entry_insert(ENTRY **head, ENTRY *e)
@@ -148,7 +153,7 @@ void entry_remove(ENTRY **head, char *name)
 
     if (strcmp(target->name, name) == 0)
     {
-        *head = NULL;
+        *head = (*head)->next;
         free(target);
         return;
     }

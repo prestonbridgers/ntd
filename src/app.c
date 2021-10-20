@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     MY_WINDOW *todo;
     MY_WINDOW *add_form_window; // The window that stores the add form
     char *title = "TODO List Manager v0.1";
-    char *footer = "'a' and 'd' to add/delete an entry";
+    char *footer = "'a' and 'd' to add/delete an entry. 'm' to toggle an entry.";
 
     // Starting colors and initializing color pairs
     if (has_colors())
@@ -63,6 +63,10 @@ int main(int argc, char *argv[])
                 break;
             case 'd': // Delete an item
                 form_handle(add_form_window, &entries, ENTRY_DELETE);
+                top_panel(todo->panel);
+                break;
+            case 'm': // Delete an item
+                form_handle(add_form_window, &entries, ENTRY_MARK);
                 top_panel(todo->panel);
                 break;
             default:

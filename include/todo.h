@@ -9,6 +9,7 @@
 
 #define ENTRY_INSERT 0
 #define ENTRY_DELETE 1
+#define ENTRY_MARK 2
 
 typedef struct
 {
@@ -35,6 +36,7 @@ ENTRY*  entry_fromFile(char *filename);
 void    entry_free(ENTRY *head);
 void    entry_insert(ENTRY **head, ENTRY *e);
 void    entry_remove(ENTRY **head, char *name);
+void    entry_mark(ENTRY **head, char *name);
 ENTRY*  entry_find(ENTRY *head, char*name);
 char*   entry_toString(ENTRY *e);
 void    entry_toFile(ENTRY *head, char *filename);

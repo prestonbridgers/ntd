@@ -27,6 +27,8 @@ void form_handle(MY_WINDOW *arg, ENTRY **entries, short action)
     doupdate();
     curs_set(1);
 
+    form_driver(arg->form, REQ_NEXT_FIELD);
+    form_driver(arg->form, REQ_PREV_FIELD);
     // Enter form input loop
     int f;
     int done = 0;
@@ -43,10 +45,17 @@ void form_handle(MY_WINDOW *arg, ENTRY **entries, short action)
                 //FIELD **fields = form_fields(arg->form);
                 char *field_buf = field_buffer(arg->fields[0], 0);
                 char *field_buf_trimmed = trim_whitespaces(field_buf);
+                if (strcmp(field_buf_trimmed, "") == 0)
+                {
+                    done = 1;
+                    break;
+                }
                 if (action == ENTRY_DELETE)
                     entry_remove(entries, field_buf_trimmed);
                 if (action == ENTRY_INSERT)
                     entry_insert(entries, entry_create(field_buf_trimmed, 0));
+                if (action == ENTRY_MARK)
+                    entry_mark(entries, field_buf_trimmed);
                 form_driver(arg->form, REQ_CLR_FIELD);
                 done = 1;
                 break;
