@@ -56,6 +56,7 @@ void form_handle(MY_WINDOW *arg, ENTRY **entries, short action)
                     entry_insert(entries, entry_create(field_buf_trimmed, 0));
                 if (action == ENTRY_MARK)
                     entry_mark(entries, field_buf_trimmed);
+                entry_addUid(entries);
                 form_driver(arg->form, REQ_CLR_FIELD);
                 done = 1;
                 break;
@@ -202,17 +203,21 @@ void draw_entries(MY_WINDOW *arg, ENTRY *head)
     int xpos = 1;
     int ypos = 1;
     char entry_str[MAX_ENTRY_NAME_SIZE];
+    char uidBuf[16];
     ENTRY *cur;
 
     werase(arg->win);
     for (cur = head; cur != NULL; cur = cur->next)
     {
-        if (cur->isDone)
-            strncpy(entry_str, "[x] ", MAX_ENTRY_NAME_SIZE);
-        else
-            strncpy(entry_str, "[ ] ", MAX_ENTRY_NAME_SIZE);
+        sprintf(uidBuf, "%d) ", cur->uid);
+        strncpy(entry_str, uidBuf, 16);
 
-        strncat(entry_str, cur->name, MAX_ENTRY_NAME_SIZE - 5);
+        if (cur->isDone)
+            strncat(entry_str, "[x] ", 5);
+        else
+            strncat(entry_str, "[ ] ", 5);
+
+        strncat(entry_str, cur->name, MAX_ENTRY_NAME_SIZE - 16 - 5);
         mvwaddstr(arg->win, ypos, xpos, entry_str);
         ypos++;
     }

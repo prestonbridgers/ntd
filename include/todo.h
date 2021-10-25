@@ -5,7 +5,7 @@
 #include <panel.h>
 #include <form.h>
 
-#define MAX_ENTRY_NAME_SIZE 128
+#define MAX_ENTRY_NAME_SIZE 256
 
 #define ENTRY_INSERT 0
 #define ENTRY_DELETE 1
@@ -26,6 +26,7 @@ typedef struct
 
 typedef struct ENTRY_T
 {
+    int uid;
     char name[MAX_ENTRY_NAME_SIZE];
     short isDone;
     struct ENTRY_T *next;
@@ -37,6 +38,7 @@ void    entry_free(ENTRY *head);
 void    entry_insert(ENTRY **head, ENTRY *e);
 void    entry_remove(ENTRY **head, char *name);
 void    entry_mark(ENTRY **head, char *name);
+void    entry_addUid(ENTRY **head);
 ENTRY*  entry_find(ENTRY *head, char*name);
 char*   entry_toString(ENTRY *e);
 void    entry_toFile(ENTRY *head, char *filename);

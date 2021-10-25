@@ -15,6 +15,7 @@ ENTRY *entry_create(char *name, short isDone)
     ENTRY *entry = (ENTRY*) malloc(sizeof(*entry));
     strncpy(entry->name, name, MAX_ENTRY_NAME_SIZE);
     entry->isDone = isDone;
+    entry->uid = 0;
     entry->next = NULL;
 
     fprintf(stderr, "Created entry: %s\n", entry->name);
@@ -57,8 +58,22 @@ ENTRY *entry_fromFile(char *filename)
 
         entry_insert(&entries, entry_create(entry_name, entry_isDone));
     }
+    entry_addUid(&entries);
     fclose(file);
     return entries;
+}
+
+void entry_addUid(ENTRY **head)
+{
+    ENTRY *tmp = *head;
+    int count = 0;
+
+    while (tmp != NULL) {
+        tmp->uid = count;
+        count++;
+        tmp = tmp->next;
+    }
+    return;
 }
 
 void entry_toFile(ENTRY *head, char *filename)
@@ -87,9 +102,11 @@ void entry_toFile(ENTRY *head, char *filename)
     return;
 }
 
-ENTRY *entry_find(ENTRY *head, char *name)
+ENTRY *entry_find(ENTRY *head, char *uid)
 {
-    if (name == NULL)
+    int uidInt = atoi(uid);
+
+    if (uid == NULL)
     {
         fprintf(stderr, "entry_find: name == null\n");
         exit(1);
@@ -101,7 +118,7 @@ ENTRY *entry_find(ENTRY *head, char *name)
     ENTRY *tmp = head;
     for (tmp = head; tmp != NULL; tmp = tmp->next)
     {
-        if (strcmp(tmp->name, name) == 0)
+        if (tmp->uid == uidInt)
         {
             return tmp;
         }
@@ -136,9 +153,9 @@ void entry_insert(ENTRY **head, ENTRY *e)
     *head = e;
 }
 
-void entry_remove(ENTRY **head, char *name)
+void entry_remove(ENTRY **head, char *uid)
 {
-    if (name == NULL)
+    if (uid == NULL)
     {
         fprintf(stderr, "entry_remove: name == null\n");
         exit(1);
@@ -151,7 +168,9 @@ void entry_remove(ENTRY **head, char *name)
     ENTRY *prev = NULL;
     ENTRY *target = *head;
 
-    if (strcmp(target->name, name) == 0)
+    int uidInt = atoi(uid);
+
+    if (target->uid == uidInt)
     {
         *head = (*head)->next;
         free(target);
@@ -160,7 +179,7 @@ void entry_remove(ENTRY **head, char *name)
 
     while (target != NULL)
     {
-        if (strcmp(target->name, name) == 0)
+        if (target->uid == uidInt)
         {
             prev->next = target->next;
             free(target);
@@ -170,7 +189,6 @@ void entry_remove(ENTRY **head, char *name)
         prev = target;
         target = target->next;
     }
-    fprintf(stderr, "Removing %s (found %s)\n", name, target->name);
     return;
 }
 
