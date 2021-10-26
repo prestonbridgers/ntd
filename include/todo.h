@@ -63,4 +63,9 @@ Entry* entry_load(char *filename);
  *           BEGIN NCURSES RELATED FUNCTIONS             *
  *********************************************************/
 
+/*********************************************************
+ *                BEGIN UTIL FUNCTIONS                   *
+ *********************************************************/
+char* trim_whitespace(char *str);
+
 #endif
