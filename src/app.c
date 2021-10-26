@@ -76,35 +76,31 @@ int main(int argc, char *argv[])
     char c;
     while ((c = getch()) != 'q')
     {
-    /*     switch (c) */
-    /*     { */
-    /*         case 'a': // Add an item */
-    /*             form_handle(add_form_window, &entries, ENTRY_INSERT); */
-    /*             top_panel(todo->panel); */
-    /*             break; */
-    /*         case 'd': // Delete an item */
-    /*             form_handle(add_form_window, &entries, ENTRY_DELETE); */
-    /*             top_panel(todo->panel); */
-    /*             break; */
-    /*         case 'm': // Delete an item */
-    /*             form_handle(add_form_window, &entries, ENTRY_MARK); */
-    /*             top_panel(todo->panel); */
-    /*             break; */
-    /*         default: */
-    /*             break; */
-    /*     } */
+        switch (c)
+        {
+            case 'a': // Add an item
+                window_form_run(form_add, &entries, ENTRY_INSERT);
+                break;
+            case 'd': // Delete an item
+                window_form_run(form_del, &entries, ENTRY_DELETE);
+                break;
+            case 'm': // Delete an item
+                window_form_run(form_mark, &entries, ENTRY_MARK);
+                break;
+            default:
+                break;
+        }
+        top_panel(win_main->panel);
 
-    /*     // Drawing the todo window */
-    /*     draw_addForm(add_form_window); */
-    /*     draw_window(todo); */
+        // Re-drawing the main window
+        // TODO: Add a entry_list_stringize() function
+        char *tmp = malloc(MAX_ENTRY_NAME_SIZE + 18);
+        window_main_draw(win_main, entry_stringize(tmp, entries));
+        free(tmp);
 
-    /*     // Drawing the list of entries */
-    /*     draw_entries(todo, entries); */
-    /*     fprintf(stderr, "2\n"); */
-
-    /*     // Refresh virtual and physical windows */
-    /*     update_panels(); */
-    /*     doupdate(); */
+        // Refresh virtual and physical windows
+        update_panels();
+        doupdate();
     }
 
     /* // After user is done modifying entries, save the state of the entries */
