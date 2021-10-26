@@ -17,11 +17,11 @@ window_main_create()
     todo->meta.name   = "NTD v0.1";
     todo->meta.width  = COLS - 2;
     todo->meta.height = LINES - 2;
-    todo->meta.xpos   = (COLS / 2) - (todo->width / 2);
+    todo->meta.xpos   = (COLS / 2) - (todo->meta.width / 2);
     todo->meta.ypos   = 1;
-    todo->win         = newwin(todo->height, todo->width,
-                               todo->ypos, todo->xpos);
-    todo->panel       = new_panel(todo->win);
+    todo->window      = newwin(todo->meta.height, todo->meta.width,
+                               todo->meta.ypos, todo->meta.xpos);
+    todo->panel       = new_panel(todo->window);
     return todo;
 }
 
@@ -50,26 +50,26 @@ window_form_create(char *name)
     scale_form(form, &form_height, &form_width);
 
     // Creating the MY_WINDOW struct
-    add_form_win              = (MY_WINDOW*) malloc(sizeof(*add_form_win));
+    add_form_win              = (FormWindow*) malloc(sizeof(*add_form_win));
     add_form_win->meta.name   = "Add an Entry";
     add_form_win->meta.width  = form_width + 2;
     add_form_win->meta.height = form_height + 2;
     add_form_win->meta.xpos   = (COLS / 2) - (add_form_win->meta.width / 2);
     add_form_win->meta.ypos   = (LINES / 2) - (add_form_win->meta.height / 2) + 1;
-    add_form_win->win         = newwin(add_form_win->meta.height,
+    add_form_win->window      = newwin(add_form_win->meta.height,
                                        add_form_win->meta.width,
                                        add_form_win->meta.ypos,
                                        add_form_win->meta.xpos);
     add_form_win->fields = fields;
     add_form_win->form   = form;
-    add_form_win->panel  = new_panel(add_form_win->win);
+    add_form_win->panel  = new_panel(add_form_win->window);
 
-    keypad(add_form_win->win, TRUE);
+    keypad(add_form_win->window, TRUE);
 
     // Setting the window associated with this form
-    set_form_win(form, add_form_win->win);
+    set_form_win(form, add_form_win->window);
     // Setting the subwindow for this form to a derived window
-    set_form_sub(form, derwin(add_form_win->win, form_height, form_width, 1, 1));
+    set_form_sub(form, derwin(add_form_win->window, form_height, form_width, 1, 1));
 
     return add_form_win;
 }
@@ -81,13 +81,13 @@ window_form_create(char *name)
 void
 window_form_destroy(FormWindow *win)
 {
-    unpost_form(add_form_window->form);
-    free_form(add_form_window->form);
-    free_field(add_form_window->fields[0]);
-    free(add_form_window->fields);
-    delwin(add_form_window->win);
-    del_panel(add_form_window->panel);
-    free(add_form_window);
+    unpost_form(win->form);
+    free_form(win->form);
+    free_field(win->fields[0]);
+    free(win->fields);
+    delwin(win->window);
+    del_panel(win->panel);
+    free(win);
     return;
 }
 
@@ -96,11 +96,11 @@ window_form_destroy(FormWindow *win)
  * win - Pointer to the WindowForm struct to be freed.
  */
 void
-window_main_destroy(FormWindow *win)
+window_main_destroy(MainWindow *win)
 {
-    del_panel(todo->panel);
-    delwin(todo->win);
-    free(todo);
+    del_panel(win->panel);
+    delwin(win->window);
+    free(win);
     return;
 }
 
@@ -133,7 +133,7 @@ window_form_draw(FormWindow *win)
 void
 window_main_draw(MainWindow *win, char *s)
 {
-    if (arg == NULL) {
+    if (win == NULL) {
         fprintf(stderr, "draw_entries: arg == NULL");
         exit(1);
     }
@@ -164,7 +164,7 @@ window_main_draw(MainWindow *win, char *s)
     /*     ypos++; */
     /* } */
 
-    mvwprintw(win->window, "%s", s);
+    mvwprintw(win->window, 1, 1, "%s", s);
 
     box(win->window, 0, 0);
     mvwaddstr(win->window, 0,
@@ -206,12 +206,12 @@ window_form_run(FormWindow *win, Entry **entries, short action)
         switch (f) {
             case 10: // ENTER
                 // Sync the input buffer
-                form_driver(arg->form, REQ_NEXT_FIELD);
-                form_driver(arg->form, REQ_PREV_FIELD);
+                form_driver(win->form, REQ_NEXT_FIELD);
+                form_driver(win->form, REQ_PREV_FIELD);
 
                 //FIELD **fields = form_fields(arg->form);
                 char *field_buf = field_buffer(win->fields[0], 0);
-                char *field_buf_trimmed = trim_whitespaces(field_buf);
+                char *field_buf_trimmed = trim_whitespace(field_buf);
                 if (strcmp(field_buf_trimmed, "") == 0) {
                     done = 1;
                     break;
@@ -224,20 +224,20 @@ window_form_run(FormWindow *win, Entry **entries, short action)
                     entry_mark(entries, field_buf_trimmed);
                 }
                 entry_addUid(entries);
-                form_driver(arg->form, REQ_CLR_FIELD);
+                form_driver(win->form, REQ_CLR_FIELD);
                 done = 1;
                 break;
             case KEY_BACKSPACE:
-                form_driver(arg->form, REQ_DEL_PREV);
+                form_driver(win->form, REQ_DEL_PREV);
                 break;
             case KEY_LEFT:
-                form_driver(arg->form, REQ_PREV_CHAR);
+                form_driver(win->form, REQ_PREV_CHAR);
                 break;
             case KEY_RIGHT:
-                form_driver(arg->form, REQ_NEXT_CHAR);
+                form_driver(win->form, REQ_NEXT_CHAR);
                 break;
             default:
-                form_driver(arg->form, f);
+                form_driver(win->form, f);
                 break;
         }
     }

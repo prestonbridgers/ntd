@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     noecho();
     curs_set(0);
 
-    ENTRY *entries;
+    Entry *entries;
     MY_WINDOW *todo;
     MY_WINDOW *add_form_window; // The window that stores the add form
     char *title = "TODO List Manager v0.1";
