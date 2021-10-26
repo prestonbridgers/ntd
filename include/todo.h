@@ -5,7 +5,7 @@
 #include <panel.h>
 #include <form.h>
 
-#define MAX_ENTRY_NAME_SIZE 256
+#define MAX_ENTRY_NAME_SIZE 64
 
 #define ENTRY_INSERT 0
 #define ENTRY_DELETE 1
@@ -13,43 +13,54 @@
 
 typedef struct
 {
-    WINDOW *win;
-    PANEL *panel;
-    FORM *form;
-    FIELD **fields;
-    char *name;
-    int width;
-    int height;
-    int xpos;
-    int ypos;
-} MY_WINDOW;
+    char *name; /* Name to be displayed at the top of each window */
+    int width;  /* Width of the window in columns */
+    int height; /* Height of the window in lines */
+    int xpos;   /* The columns that the window should begin at */
+    int ypos;   /* The line that the window should begin at */
+} WindowMeta;
 
-typedef struct ENTRY_T
+typedef struct
 {
-    int uid;
-    char name[MAX_ENTRY_NAME_SIZE];
-    short isDone;
-    struct ENTRY_T *next;
-} ENTRY;
+    WindowMeta meta; /* Metadata for the window */
+    WINDOW *win;     /* nCurses WINDOW struct */
+    PANEL *panel;    /* nCurses PANEL struct */
+} MainWindow;
 
-ENTRY*  entry_create(char *name, short isDone);
-ENTRY*  entry_fromFile(char *filename);
-void    entry_free(ENTRY *head);
-void    entry_insert(ENTRY **head, ENTRY *e);
-void    entry_remove(ENTRY **head, char *name);
-void    entry_mark(ENTRY **head, char *name);
-void    entry_addUid(ENTRY **head);
-ENTRY*  entry_find(ENTRY *head, char*name);
-char*   entry_toString(ENTRY *e);
-void    entry_toFile(ENTRY *head, char *filename);
+typedef struct
+{
+    WindowMeta meta; /* Metadata for the window */
+    WINDOW *window;  /* nCurses WINDOW struct */
+    PANEL *panel;    /* nCurses PANEL struct */
+    FORM *form;      /* nCurses FORM struct */
+    FIELD **fields;  /* Array of dynamically allocated nCurses FIELD structs */
+} FormWindow;
 
-// Related to ncurses
-MY_WINDOW *init_todoWindow();
-MY_WINDOW *init_addFormWindow();
-void draw_window(MY_WINDOW *arg);
-void draw_addForm(MY_WINDOW *arg);
-void draw_entries(MY_WINDOW *arg, ENTRY *head);
-char* trim_whitespaces(char *str);
-void form_handle(MY_WINDOW *arg, ENTRY **entries, short action);
+typedef struct Entry_t
+{
+    int uid;                        /* UID for the entry. Entries are keyed on
+                                       this field. */
+    char name[MAX_ENTRY_NAME_SIZE]; /* A user-defined name for the entry */
+    short isDone;                   /* Flag determning completion status */
+    struct Entry_t *next;           /* Pointer to the next entry in the list */
+} Entry;
+
+/*********************************************************
+ *      BEGIN ENTRY LINKED LIST RELATED FUNCTIONS        *
+ *********************************************************/
+Entry* entry_create(char *name);
+void   entry_destroy(Entry *head);
+Entry* entry_find(Entry *head, char *uid);
+void   entry_remove(Entry **head, char *uid);
+void   entry_mark(Entry **head, char *uid);
+void   entry_insert(Entry **head, Entry *e);
+void   entry_addUid(Entry **head);
+char*  entry_stringize(Entry *e);
+void   entry_save(Entry *head, char *filename);
+Entry* entry_load(char *filename);
+
+/*********************************************************
+ *           BEGIN NCURSES RELATED FUNCTIONS             *
+ *********************************************************/
 
 #endif
