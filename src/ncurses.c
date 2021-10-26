@@ -104,6 +104,75 @@ window_main_destroy(FormWindow *win)
     return;
 }
 
+/* Draws the form windows to the nCurses virtual buffer.
+ *
+ * win - Pointer to the FormWindow struct to be drawn.
+ */
+void
+window_form_draw(FormWindow *win)
+{
+    if (win == NULL) {
+        fprintf(stderr, "draw_addForm: win == NULL");
+        exit(1);
+    }
+
+    box(win->window, 0, 0);
+    mvwaddstr(win->window, 0,
+              (win->meta.width / 2) - (strlen(win->meta.name) / 2),
+              win->meta.name);
+    post_form(win->form);
+    return;
+}
+
+/* Draws a MainWindow struct to nCurses virtual buffer, then prints a string
+ * onto that window.
+ *
+ * win - Pointer to the MainWindow struct to be drawn.
+ * s   - The string to be drawn onto win.
+ */
+void
+window_main_draw(MainWindow *win, char *s)
+{
+    if (arg == NULL) {
+        fprintf(stderr, "draw_entries: arg == NULL");
+        exit(1);
+    }
+    if (s == NULL) {
+        fprintf(stderr, "draw_entries: s == NULL");
+        exit(1);
+    }
+
+    /* int xpos = 1; */
+    /* int ypos = 1; */
+    /* char entry_str[MAX_ENTRY_NAME_SIZE]; */
+    /* char uidBuf[16]; */
+    /* ENTRY *cur; */
+
+    /* werase(arg->win); */
+    /* for (cur = head; cur != NULL; cur = cur->next) */
+    /* { */
+    /*     sprintf(uidBuf, "%d) ", cur->uid); */
+    /*     strncpy(entry_str, uidBuf, 16); */
+
+    /*     if (cur->isDone) */
+    /*         strncat(entry_str, "[x] ", 5); */
+    /*     else */
+    /*         strncat(entry_str, "[ ] ", 5); */
+
+    /*     strncat(entry_str, cur->name, MAX_ENTRY_NAME_SIZE - 16 - 5); */
+    /*     mvwaddstr(arg->win, ypos, xpos, entry_str); */
+    /*     ypos++; */
+    /* } */
+
+    mvwprintw(win->window, "%s", s);
+
+    box(win->window, 0, 0);
+    mvwaddstr(win->window, 0,
+              (win->meta.width / 2) - (strlen(win->meta.name) / 2),
+              win->meta.name);
+    return;
+}
+
 void form_handle(MY_WINDOW *arg, ENTRY **entries, short action)
 {
     if (arg == NULL) {
@@ -169,68 +238,5 @@ void form_handle(MY_WINDOW *arg, ENTRY **entries, short action)
         }
     }
     curs_set(0);
-    return;
-}
-
-void draw_addForm(MY_WINDOW *arg)
-{
-    if (arg == NULL)
-    {
-        fprintf(stderr, "draw_addForm: arg == NULL");
-        exit(1);
-    }
-    box(arg->win, 0, 0);
-    mvwaddstr(arg->win, 0, (arg->width / 2) - (strlen(arg->name) / 2), arg->name);
-    post_form(arg->form);
-    return;
-}
-
-
-
-
-void draw_window(MY_WINDOW *arg)
-{
-    if (arg == NULL)
-    {
-        fprintf(stderr, "draw_window: arg == NULL");
-        exit(1);
-    }
-    box(arg->win, '|', '-');
-    mvwaddstr(arg->win, 0, (arg->width / 2) - (strlen(arg->name) / 2),
-              arg->name);
-    return;
-}
-
-void draw_entries(MY_WINDOW *arg, ENTRY *head)
-{
-    if (arg == NULL)
-    {
-        fprintf(stderr, "draw_entries: arg == NULL");
-        exit(1);
-    }
-    int xpos = 1;
-    int ypos = 1;
-    char entry_str[MAX_ENTRY_NAME_SIZE];
-    char uidBuf[16];
-    ENTRY *cur;
-
-    werase(arg->win);
-    for (cur = head; cur != NULL; cur = cur->next)
-    {
-        sprintf(uidBuf, "%d) ", cur->uid);
-        strncpy(entry_str, uidBuf, 16);
-
-        if (cur->isDone)
-            strncat(entry_str, "[x] ", 5);
-        else
-            strncat(entry_str, "[ ] ", 5);
-
-        strncat(entry_str, cur->name, MAX_ENTRY_NAME_SIZE - 16 - 5);
-        mvwaddstr(arg->win, ypos, xpos, entry_str);
-        ypos++;
-    }
-
-    // NOTE: May not need this
-    box(arg->win, '|', '-');
     return;
 }

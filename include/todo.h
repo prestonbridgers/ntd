@@ -23,7 +23,7 @@ typedef struct
 typedef struct
 {
     WindowMeta meta; /* Metadata for the window */
-    WINDOW *win;     /* nCurses WINDOW struct */
+    WINDOW *window;     /* nCurses WINDOW struct */
     PANEL *panel;    /* nCurses PANEL struct */
 } MainWindow;
 
@@ -64,8 +64,11 @@ Entry* entry_load(char *filename);
  *********************************************************/
 MainWindow* window_main_create();
 void        window_main_destroy(MainWindow *win);
+void        window_main_draw(MainWindow *win, char *s);
+
 FormWindow* window_form_create(char *name);
 void        window_form_destroy(FormWindow *win);
+void        window_form_draw(FormWindow *win);
 
 /*********************************************************
  *                BEGIN UTIL FUNCTIONS                   *
