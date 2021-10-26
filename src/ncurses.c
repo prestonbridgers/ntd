@@ -173,9 +173,17 @@ window_main_draw(MainWindow *win, char *s)
     return;
 }
 
-void form_handle(MY_WINDOW *arg, ENTRY **entries, short action)
+/* Handles all the user interaction with the nCurses forms.
+ *
+ * win - The FormWindow struct that is being used.
+ * entries - The list of Entry structs that is being used (mark/add/remove).
+ * action - An action define that will be switched on (ENTRY_INSERT,
+ *          ENTRY_DELTE, or ENTRY_MARK).
+ */
+void
+window_form_run(FormWindow *win, Entry **entries, short action)
 {
-    if (arg == NULL) {
+    if (win == NULL) {
         fprintf(stderr, "form_add: arg == NULL\n");
         exit(1);
     }
@@ -185,40 +193,36 @@ void form_handle(MY_WINDOW *arg, ENTRY **entries, short action)
         exit(1);
     }
 
-    top_panel(arg->panel);
+    curs_set(1);
+    top_panel(win->panel);
     update_panels();
     doupdate();
-    curs_set(1);
 
-    form_driver(arg->form, REQ_NEXT_FIELD);
-    form_driver(arg->form, REQ_PREV_FIELD);
     // Enter form input loop
     int f;
     int done = 0;
-    while (!done)
-    {
-        f = wgetch(arg->win);
-        switch (f)
-        {
+    while (!done) {
+        f = wgetch(win->window);
+        switch (f) {
             case 10: // ENTER
-                // sync the field buffer with what's displayed
+                // Sync the input buffer
                 form_driver(arg->form, REQ_NEXT_FIELD);
                 form_driver(arg->form, REQ_PREV_FIELD);
-                // ADD ENTRY TO THE LIST HERE
+
                 //FIELD **fields = form_fields(arg->form);
-                char *field_buf = field_buffer(arg->fields[0], 0);
+                char *field_buf = field_buffer(win->fields[0], 0);
                 char *field_buf_trimmed = trim_whitespaces(field_buf);
-                if (strcmp(field_buf_trimmed, "") == 0)
-                {
+                if (strcmp(field_buf_trimmed, "") == 0) {
                     done = 1;
                     break;
                 }
-                if (action == ENTRY_DELETE)
+                if (action == ENTRY_DELETE) {
                     entry_remove(entries, field_buf_trimmed);
-                if (action == ENTRY_INSERT)
-                    entry_insert(entries, entry_create(field_buf_trimmed, 0));
-                if (action == ENTRY_MARK)
+                } else if (action == ENTRY_INSERT) {
+                    entry_insert(entries, entry_create(field_buf_trimmed));
+                } else if (action == ENTRY_MARK) {
                     entry_mark(entries, field_buf_trimmed);
+                }
                 entry_addUid(entries);
                 form_driver(arg->form, REQ_CLR_FIELD);
                 done = 1;

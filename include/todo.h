@@ -69,6 +69,7 @@ void        window_main_draw(MainWindow *win, char *s);
 FormWindow* window_form_create(char *name);
 void        window_form_destroy(FormWindow *win);
 void        window_form_draw(FormWindow *win);
+void        window_form_run(FormWindow *win, Entry **entries, short action);
 
 /*********************************************************
  *                BEGIN UTIL FUNCTIONS                   *
