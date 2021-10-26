@@ -104,11 +104,12 @@ entry_save(Entry *head, char *filename)
     Entry *tmp = head;
 
     while (tmp != NULL) {
-        char *entry_str = entry_stringize(tmp);
+        char *entry_str = (char*) malloc(MAX_ENTRY_NAME_SIZE + 18);
+        entry_stringize(entry_str, tmp);
         fwrite(entry_str, 1, strlen(entry_str), file);
+        free(entry_str);
         fputc('\n', file);
         fflush(file);
-        free(entry_str);
         tmp = tmp->next;
     }
 
@@ -230,7 +231,7 @@ entry_remove(Entry **head, char *uid)
  * e - The Entry struct to be stringized.
  */
 char*
-entry_stringize(Entry *e)
+entry_stringize(char *dest, Entry *e)
 {
     if (e == NULL) {
         fprintf(stderr, "entry_toString: e == NULL\n");
@@ -241,16 +242,14 @@ entry_stringize(Entry *e)
         return "";
     }
 
-    char *str = (char*) malloc(1024 * sizeof(*str));
-    strncpy(str, e->name, MAX_ENTRY_NAME_SIZE);
-    strcat(str, "|");
+    sprintf(dest, "%s%s", e->name, "|");
 
     if (e->isDone) {
-        strcat(str, "complete");
+        strcat(dest, "complete");
     } else {
-        strcat(str, "incomplete");
+        strcat(dest, "incomplete");
     }
-    return str;
+    return dest;
 }
 
 /* Frees the memory associated with a given Entry struct.

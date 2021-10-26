@@ -8,7 +8,7 @@
  *
  * str - The string to be modified.
  */
-char* trim_whitespaces(char *str)
+char* trim_whitespace(char *str)
 {
     if (str == NULL)
     {

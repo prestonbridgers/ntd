@@ -11,10 +11,10 @@
 /* Creates the MainWindow instance and returns a pointer to it.
  */
 MainWindow*
-window_main_create()
+window_main_create(char *name)
 {
     MainWindow *todo  = (MainWindow*) malloc(sizeof(*todo));
-    todo->meta.name   = "NTD v0.1";
+    strncpy(todo->meta.name, name, MAX_WINDOW_NAME_SIZE);
     todo->meta.width  = COLS - 2;
     todo->meta.height = LINES - 2;
     todo->meta.xpos   = (COLS / 2) - (todo->meta.width / 2);
@@ -51,7 +51,7 @@ window_form_create(char *name)
 
     // Creating the MY_WINDOW struct
     add_form_win              = (FormWindow*) malloc(sizeof(*add_form_win));
-    add_form_win->meta.name   = "Add an Entry";
+    strncpy(add_form_win->meta.name, name, MAX_WINDOW_NAME_SIZE);
     add_form_win->meta.width  = form_width + 2;
     add_form_win->meta.height = form_height + 2;
     add_form_win->meta.xpos   = (COLS / 2) - (add_form_win->meta.width / 2);

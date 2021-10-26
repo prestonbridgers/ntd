@@ -14,7 +14,7 @@ OBJS=$(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRCS))
 BIN=ntd
 
 $(BIN): $(OBJS)
-	$(CC) $(CFLAGS) $(LFLAGS) $^ -o $(BINDIR)/$@
+	$(CC) $(LFLAGS) $^ -o $(BINDIR)/$@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCDIR)/todo.h
 	$(CC) $(CFLAGS) -c $< -o $@

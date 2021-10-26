@@ -8,93 +8,116 @@
 
 #include "todo.h"
 
-int main(int argc, char *argv[])
+/* Initializes the curses library.
+ */
+void curs_init()
 {
     initscr();
     cbreak();
     noecho();
     curs_set(0);
 
-    Entry *entries;
-    MY_WINDOW *todo;
-    MY_WINDOW *add_form_window; // The window that stores the add form
-    char *title = "TODO List Manager v0.1";
-    char *footer = "'a' and 'd' to add/delete an entry. 'm' to toggle an entry.";
-
     // Starting colors and initializing color pairs
-    if (has_colors())
+    if (has_colors()) {
         start_color();
+    }
     init_pair(1, COLOR_CYAN, COLOR_BLACK);
 
+    return;
+}
+
+int main(int argc, char *argv[])
+{
+    Entry *entries;
+    MainWindow *win_main;
+    FormWindow *form_add; // The window that stores the add form
+    FormWindow *form_del; // The window that stores the add form
+    FormWindow *form_mark; // The window that stores the add form
+
+    char *title_main  = "NTD v0.1";
+    char *title_add   = "Add an entry";
+    char *title_del   = "Delete an entry";
+    char *title_mark  = "Mark an entry";
+
+    // TODO: add this to window_main_create() and draw it in window_main_draw()
+    char *footer_main = "'a' and 'd' to add/delete an entry. 'm' to toggle an entry.";
+
+    curs_init();
+
     // Initializing the windows
-    add_form_window = init_addFormWindow();
-    todo = init_todoWindow();
+    form_mark = window_form_create(title_mark);
+    form_del  = window_form_create(title_del);
+    form_add  = window_form_create(title_add);
+    win_main  = window_main_create(title_main);
     update_panels();
 
     // Fabricating todo list entries
-    entries = entry_fromFile("entries.txt");
+    entries = entry_load("entries.txt");
 
     // Printing the title and footer
-    mvprintw(0, (COLS / 2) - (strlen(title) / 2), title);
-    mvprintw(LINES - 1, 1, footer);
-
-    // Coloring the title and footer
-    mvchgat(0, 0, -1, A_BOLD, 1, NULL);
+    mvprintw(LINES - 1, 1, footer_main);
     mvchgat(LINES - 1, 0, -1, A_BOLD, 1, NULL);
 
-    // Drawing the todo window
-    draw_addForm(add_form_window);
-    draw_window(todo);
-    // Drawing the list of entries
-    draw_entries(todo, entries);
-    fprintf(stderr, "1\n");
-    // Refresh virtual and physical windows
+    // Drawing the form windows
+    window_form_draw(form_add);
+    window_form_draw(form_del);
+    window_form_draw(form_mark);
+
+    // Drawing the main window
+    // TODO: Add a entry_list_stringize() function
+    char *tmp = malloc(MAX_ENTRY_NAME_SIZE + 18);
+    window_main_draw(win_main, entry_stringize(tmp, entries));
+    free(tmp);
+
+    // Updating screen
     update_panels();
     doupdate();
 
     char c;
     while ((c = getch()) != 'q')
     {
-        switch (c)
-        {
-            case 'a': // Add an item
-                form_handle(add_form_window, &entries, ENTRY_INSERT);
-                top_panel(todo->panel);
-                break;
-            case 'd': // Delete an item
-                form_handle(add_form_window, &entries, ENTRY_DELETE);
-                top_panel(todo->panel);
-                break;
-            case 'm': // Delete an item
-                form_handle(add_form_window, &entries, ENTRY_MARK);
-                top_panel(todo->panel);
-                break;
-            default:
-                break;
-        }
+    /*     switch (c) */
+    /*     { */
+    /*         case 'a': // Add an item */
+    /*             form_handle(add_form_window, &entries, ENTRY_INSERT); */
+    /*             top_panel(todo->panel); */
+    /*             break; */
+    /*         case 'd': // Delete an item */
+    /*             form_handle(add_form_window, &entries, ENTRY_DELETE); */
+    /*             top_panel(todo->panel); */
+    /*             break; */
+    /*         case 'm': // Delete an item */
+    /*             form_handle(add_form_window, &entries, ENTRY_MARK); */
+    /*             top_panel(todo->panel); */
+    /*             break; */
+    /*         default: */
+    /*             break; */
+    /*     } */
 
-        // Drawing the todo window
-        draw_addForm(add_form_window);
-        draw_window(todo);
+    /*     // Drawing the todo window */
+    /*     draw_addForm(add_form_window); */
+    /*     draw_window(todo); */
 
-        // Drawing the list of entries
-        draw_entries(todo, entries);
-        fprintf(stderr, "2\n");
+    /*     // Drawing the list of entries */
+    /*     draw_entries(todo, entries); */
+    /*     fprintf(stderr, "2\n"); */
 
-        // Refresh virtual and physical windows
-        update_panels();
-        doupdate();
+    /*     // Refresh virtual and physical windows */
+    /*     update_panels(); */
+    /*     doupdate(); */
     }
 
-    // After user is done modifying entries, save the state of the entries
-    // to a file
-    entry_toFile(entries, "entries.txt");
+    /* // After user is done modifying entries, save the state of the entries */
+    /* // to a file */
+    entry_save(entries, "entries.txt");
 
     // Free things for the form window
-    window_form_destroy(add_form_window);
+    window_form_destroy(form_add);
+    window_form_destroy(form_del);
+    window_form_destroy(form_mark);
 
-    window_main_destroy(todo);
-    entry_free(entries);
+    window_main_destroy(win_main);
+    entry_destroy(entries);
     endwin();
 	return EXIT_SUCCESS;	
 }

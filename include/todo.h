@@ -6,6 +6,7 @@
 #include <form.h>
 
 #define MAX_ENTRY_NAME_SIZE 64
+#define MAX_WINDOW_NAME_SIZE 32
 
 #define ENTRY_INSERT 0
 #define ENTRY_DELETE 1
@@ -13,7 +14,7 @@
 
 typedef struct
 {
-    char *name; /* Name to be displayed at the top of each window */
+    char name[MAX_WINDOW_NAME_SIZE]; /* Name to be displayed at the top of each window */
     int width;  /* Width of the window in columns */
     int height; /* Height of the window in lines */
     int xpos;   /* The columns that the window should begin at */
@@ -55,14 +56,14 @@ void   entry_remove(Entry **head, char *uid);
 void   entry_mark(Entry **head, char *uid);
 void   entry_insert(Entry **head, Entry *e);
 void   entry_addUid(Entry **head);
-char*  entry_stringize(Entry *e);
+char*  entry_stringize(char *dst, Entry *e);
 void   entry_save(Entry *head, char *filename);
 Entry* entry_load(char *filename);
 
 /*********************************************************
  *           BEGIN NCURSES RELATED FUNCTIONS             *
  *********************************************************/
-MainWindow* window_main_create();
+MainWindow* window_main_create(char *name);
 void        window_main_destroy(MainWindow *win);
 void        window_main_draw(MainWindow *win, char *s);
 
