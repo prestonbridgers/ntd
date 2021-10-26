@@ -8,16 +8,110 @@
 
 #include "todo.h"
 
+/* Creates the MainWindow instance and returns a pointer to it.
+ */
+MainWindow*
+window_main_create()
+{
+    MainWindow *todo  = (MainWindow*) malloc(sizeof(*todo));
+    todo->meta.name   = "NTD v0.1";
+    todo->meta.width  = COLS - 2;
+    todo->meta.height = LINES - 2;
+    todo->meta.xpos   = (COLS / 2) - (todo->width / 2);
+    todo->meta.ypos   = 1;
+    todo->win         = newwin(todo->height, todo->width,
+                               todo->ypos, todo->xpos);
+    todo->panel       = new_panel(todo->win);
+    return todo;
+}
+
+/* Creates a FormWindow instance and returns a pointer to it.
+ */
+FormWindow*
+window_form_create(char *name)
+{
+    FormWindow *add_form_win;
+    FIELD **fields;
+    FORM *form;
+    int form_width;
+    int form_height;
+
+    // Initializing the fields
+    fields = (FIELD**) malloc(2 * sizeof(*fields));
+    fields[0] = new_field(1, 30, 0, 0, 0, 0);
+    fields[1] = NULL;
+
+    set_field_opts(fields[0], O_VISIBLE | O_PUBLIC | O_EDIT | O_ACTIVE);
+
+    // Creating the form
+    form = new_form(fields);
+
+    // Getting the lines and cols needed for the form
+    scale_form(form, &form_height, &form_width);
+
+    // Creating the MY_WINDOW struct
+    add_form_win              = (MY_WINDOW*) malloc(sizeof(*add_form_win));
+    add_form_win->meta.name   = "Add an Entry";
+    add_form_win->meta.width  = form_width + 2;
+    add_form_win->meta.height = form_height + 2;
+    add_form_win->meta.xpos   = (COLS / 2) - (add_form_win->meta.width / 2);
+    add_form_win->meta.ypos   = (LINES / 2) - (add_form_win->meta.height / 2) + 1;
+    add_form_win->win         = newwin(add_form_win->meta.height,
+                                       add_form_win->meta.width,
+                                       add_form_win->meta.ypos,
+                                       add_form_win->meta.xpos);
+    add_form_win->fields = fields;
+    add_form_win->form   = form;
+    add_form_win->panel  = new_panel(add_form_win->win);
+
+    keypad(add_form_win->win, TRUE);
+
+    // Setting the window associated with this form
+    set_form_win(form, add_form_win->win);
+    // Setting the subwindow for this form to a derived window
+    set_form_sub(form, derwin(add_form_win->win, form_height, form_width, 1, 1));
+
+    return add_form_win;
+}
+
+/* Frees all memory associated with a FormWindow struct.
+ *
+ * win - Pointer to the WindowForm struct to be freed.
+ */
+void
+window_form_destroy(FormWindow *win)
+{
+    unpost_form(add_form_window->form);
+    free_form(add_form_window->form);
+    free_field(add_form_window->fields[0]);
+    free(add_form_window->fields);
+    delwin(add_form_window->win);
+    del_panel(add_form_window->panel);
+    free(add_form_window);
+    return;
+}
+
+/* Frees all memory associated with a FormWindow struct.
+ *
+ * win - Pointer to the WindowForm struct to be freed.
+ */
+void
+window_main_destroy(FormWindow *win)
+{
+    del_panel(todo->panel);
+    delwin(todo->win);
+    free(todo);
+    return;
+}
+
 void form_handle(MY_WINDOW *arg, ENTRY **entries, short action)
 {
-    if (arg == NULL)
-    {
+    if (arg == NULL) {
         fprintf(stderr, "form_add: arg == NULL\n");
         exit(1);
     }
 
-    if (entries == NULL)
-    {   
+    if (entries == NULL) {   
         fprintf(stderr, "form_add: entries == NULL\n");
         exit(1);
     }
@@ -78,50 +172,6 @@ void form_handle(MY_WINDOW *arg, ENTRY **entries, short action)
     return;
 }
 
-MY_WINDOW *init_addFormWindow()
-{
-    MY_WINDOW *add_form_win;
-    FIELD **fields;
-    FORM *form;
-    int form_width;
-    int form_height;
-
-    // Initializing the fields
-    fields = (FIELD**) malloc(2 * sizeof(*fields));
-    fields[0] = new_field(1, 30, 0, 0, 0, 0);
-    fields[1] = NULL;
-
-    set_field_opts(fields[0], O_VISIBLE | O_PUBLIC | O_EDIT | O_ACTIVE);
-
-    // Creating the form
-    form = new_form(fields);
-
-    // Getting the lines and cols needed for the form
-    scale_form(form, &form_height, &form_width);
-
-    // Creating the MY_WINDOW struct
-    add_form_win         = (MY_WINDOW*) malloc(sizeof(*add_form_win));
-    add_form_win->name   = "Add an Entry";
-    add_form_win->width  = form_width + 2;
-    add_form_win->height = form_height + 2;
-    add_form_win->xpos   = (COLS / 2) - (add_form_win->width / 2);
-    add_form_win->ypos   = (LINES / 2) - (add_form_win->height / 2) + 1;
-    add_form_win->win    = newwin(add_form_win->height, add_form_win->width,
-                                  add_form_win->ypos, add_form_win->xpos);
-    add_form_win->fields = fields;
-    add_form_win->form   = form;
-    add_form_win->panel  = new_panel(add_form_win->win);
-
-    keypad(add_form_win->win, TRUE);
-
-    // Setting the window associated with this form
-    set_form_win(form, add_form_win->win);
-    // Setting the subwindow for this form to a derived window
-    set_form_sub(form, derwin(add_form_win->win, form_height, form_width, 1, 1));
-
-    return add_form_win;
-}
-
 void draw_addForm(MY_WINDOW *arg)
 {
     if (arg == NULL)
@@ -135,19 +185,6 @@ void draw_addForm(MY_WINDOW *arg)
     return;
 }
 
-MY_WINDOW *init_todoWindow()
-{
-    MY_WINDOW *todo = (MY_WINDOW*) malloc(sizeof(*todo));
-    todo->name      = "TODO Items";
-    todo->width     = COLS - 2;
-    todo->height    = LINES - 2;
-    todo->xpos      = (COLS / 2) - (todo->width / 2);
-    todo->ypos      = 1;
-    todo->win       = newwin(todo->height, todo->width,
-                             todo->ypos, todo->xpos);
-    todo->panel     = new_panel(todo->win);
-    return todo;
-}
 
 
 

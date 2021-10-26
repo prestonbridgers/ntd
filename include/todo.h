@@ -62,6 +62,10 @@ Entry* entry_load(char *filename);
 /*********************************************************
  *           BEGIN NCURSES RELATED FUNCTIONS             *
  *********************************************************/
+MainWindow* window_main_create();
+void        window_main_destroy(MainWindow *win);
+FormWindow* window_form_create(char *name);
+void        window_form_destroy(FormWindow *win);
 
 /*********************************************************
  *                BEGIN UTIL FUNCTIONS                   *

@@ -91,17 +91,9 @@ int main(int argc, char *argv[])
     entry_toFile(entries, "entries.txt");
 
     // Free things for the form window
-    unpost_form(add_form_window->form);
-    free_form(add_form_window->form);
-    free_field(add_form_window->fields[0]);
-    free(add_form_window->fields);
-    delwin(add_form_window->win);
-    del_panel(add_form_window->panel);
-    free(add_form_window);
+    window_form_destroy(add_form_window);
 
-    del_panel(todo->panel);
-    delwin(todo->win);
-    free(todo);
+    window_main_destroy(todo);
     entry_free(entries);
     endwin();
 	return EXIT_SUCCESS;	
