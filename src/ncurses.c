@@ -26,6 +26,8 @@ window_main_create(char *name)
 }
 
 /* Creates a FormWindow instance and returns a pointer to it.
+ *
+ * name - The name that will be displayed along the top border of the window.
  */
 FormWindow*
 window_form_create(char *name)
@@ -120,6 +122,7 @@ window_form_draw(FormWindow *win)
     mvwaddstr(win->window, 0,
               (win->meta.width / 2) - (strlen(win->meta.name) / 2),
               win->meta.name);
+    mvwchgat(win->window, 0, win->meta.width / 2 - strlen(win->meta.name) / 2, strlen(win->meta.name), A_BOLD, 1, NULL);
     post_form(win->form);
     return;
 }
@@ -148,6 +151,7 @@ window_main_draw(MainWindow *win, char *s)
     mvwaddstr(win->window, 0,
               (win->meta.width / 2) - (strlen(win->meta.name) / 2),
               win->meta.name);
+    mvwchgat(win->window, 0, win->meta.width / 2 - strlen(win->meta.name) / 2, strlen(win->meta.name), A_BOLD, 1, NULL);
     return;
 }
 
