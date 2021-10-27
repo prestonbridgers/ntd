@@ -33,14 +33,12 @@ int main(int argc, char *argv[])
     FormWindow *form_add; // The window that stores the add form
     FormWindow *form_del; // The window that stores the add form
     FormWindow *form_mark; // The window that stores the add form
-
     char *title_main  = "NTD v0.1";
+    char *footer_main = "'a' and 'd' to add/delete an entry. 'm' to toggle an entry.";
     char *title_add   = "Add an entry";
     char *title_del   = "Delete an entry";
     char *title_mark  = "Mark an entry";
-
-    // TODO: add this to window_main_create() and draw it in window_main_draw()
-    char *footer_main = "'a' and 'd' to add/delete an entry. 'm' to toggle an entry.";
+    char *entries_str;
 
     curs_init();
 
@@ -54,7 +52,7 @@ int main(int argc, char *argv[])
     // Fabricating todo list entries
     entries = entry_load("entries.txt");
 
-    // Printing the title and footer
+    // Printing the footer to stdscr
     mvprintw(LINES - 1, 1, footer_main);
     mvchgat(LINES - 1, 0, -1, A_BOLD, 1, NULL);
 
@@ -64,12 +62,10 @@ int main(int argc, char *argv[])
     window_form_draw(form_mark);
 
     // Drawing the main window
-    // TODO: Add a entry_list_stringize() function
-    char *tmp = malloc(1024);
-    window_main_draw(win_main, entry_stringize_all(entries, tmp));
-    free(tmp);
+    entries_str = malloc(1024);
+    window_main_draw(win_main, entry_stringize_all(entries, entries_str));
+    free(entries_str);
 
-    // Updating screen
     update_panels();
     doupdate();
 
@@ -93,12 +89,10 @@ int main(int argc, char *argv[])
         top_panel(win_main->panel);
 
         // Re-drawing the main window
-        // TODO: Add a entry_list_stringize() function
-        char *tmp = malloc(1024);
-        window_main_draw(win_main, entry_stringize_all(entries, tmp));
-        free(tmp);
+        entries_str = malloc(1024);
+        window_main_draw(win_main, entry_stringize_all(entries, entries_str));
+        free(entries_str);
 
-        // Refresh virtual and physical windows
         update_panels();
         doupdate();
     }
