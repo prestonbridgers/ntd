@@ -142,30 +142,8 @@ window_main_draw(MainWindow *win, char *s)
         exit(1);
     }
 
-    /* int xpos = 1; */
-    /* int ypos = 1; */
-    /* char entry_str[MAX_ENTRY_NAME_SIZE]; */
-    /* char uidBuf[16]; */
-    /* ENTRY *cur; */
-
-    /* werase(arg->win); */
-    /* for (cur = head; cur != NULL; cur = cur->next) */
-    /* { */
-    /*     sprintf(uidBuf, "%d) ", cur->uid); */
-    /*     strncpy(entry_str, uidBuf, 16); */
-
-    /*     if (cur->isDone) */
-    /*         strncat(entry_str, "[x] ", 5); */
-    /*     else */
-    /*         strncat(entry_str, "[ ] ", 5); */
-
-    /*     strncat(entry_str, cur->name, MAX_ENTRY_NAME_SIZE - 16 - 5); */
-    /*     mvwaddstr(arg->win, ypos, xpos, entry_str); */
-    /*     ypos++; */
-    /* } */
-
+    werase(win->window);
     mvwprintw(win->window, 1, 1, "%s", s);
-
     box(win->window, 0, 0);
     mvwaddstr(win->window, 0,
               (win->meta.width / 2) - (strlen(win->meta.name) / 2),

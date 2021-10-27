@@ -65,8 +65,8 @@ int main(int argc, char *argv[])
 
     // Drawing the main window
     // TODO: Add a entry_list_stringize() function
-    char *tmp = malloc(MAX_ENTRY_NAME_SIZE + 18);
-    window_main_draw(win_main, entry_stringize(tmp, entries));
+    char *tmp = malloc(1024);
+    window_main_draw(win_main, entry_stringize_all(entries, tmp));
     free(tmp);
 
     // Updating screen
@@ -94,8 +94,8 @@ int main(int argc, char *argv[])
 
         // Re-drawing the main window
         // TODO: Add a entry_list_stringize() function
-        char *tmp = malloc(MAX_ENTRY_NAME_SIZE + 18);
-        window_main_draw(win_main, entry_stringize(tmp, entries));
+        char *tmp = malloc(1024);
+        window_main_draw(win_main, entry_stringize_all(entries, tmp));
         free(tmp);
 
         // Refresh virtual and physical windows

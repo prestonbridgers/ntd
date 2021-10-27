@@ -252,6 +252,38 @@ entry_stringize(char *dest, Entry *e)
     return dest;
 }
 
+/* Stringizes an entire list of Entry structs.
+ * This is called by main to get the string representation of a list of
+ * entries to pass to the window_draw_main() function. This and the draw
+ * function are not coupled.
+ *
+ * head    - Pointer to the linked list of Entry structs.
+ * dest    - Pointer to a string where the string will be stored.
+ *
+ * returns - The pointer to the modified string.
+ */
+char*
+entry_stringize_all(Entry *head, char *dest)
+{
+    char line[1024];
+    char done_str[32];
+    Entry *cur;
+
+    strcpy(dest, "");
+
+    for (cur = head; cur != NULL; cur = cur->next) {
+        if (cur->isDone) {
+            strcpy(done_str, "[x]");
+        } else {
+            strcpy(done_str, "[ ]");
+        }
+
+        sprintf(line, "%d) %s %s\n ", cur->uid, done_str, cur->name);
+        strcat(dest, line);
+    }
+    return dest;
+}
+
 /* Frees the memory associated with a given Entry struct.
  *
  * head - The Entry struct to free.

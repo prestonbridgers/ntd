@@ -57,6 +57,7 @@ void   entry_mark(Entry **head, char *uid);
 void   entry_insert(Entry **head, Entry *e);
 void   entry_addUid(Entry **head);
 char*  entry_stringize(char *dst, Entry *e);
+char*  entry_stringize_all(Entry *e, char *dest);
 void   entry_save(Entry *head, char *filename);
 Entry* entry_load(char *filename);
 
