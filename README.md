@@ -1,6 +1,6 @@
 # nCurses ToDo (ntd)
 
-ntd is a teminal based application for the creation and management of a todo list.
+ntd is a terminal based application for the creation and management of a todo list.
 The project is written in C and has very few dependencies.
 
 # Installation
