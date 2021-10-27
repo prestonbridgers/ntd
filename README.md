@@ -12,10 +12,10 @@ The project is written in C and has very few dependencies.
 
 ## Building
 
-1 Clone the repo
-2 Install any missing dependencies from the list above
-3 Run the make command
-4 Symlink the binary in the bin directory to a location in your PATH (~/.local/bin/, /usr/bin/, etc.)
+1. Clone the repo
+2. Install any missing dependencies from the list above
+3. Run the make command
+4. Symlink the binary in the bin directory to a location in your PATH (~/.local/bin/, /usr/bin/, etc.)
 
 # Contribution
 
