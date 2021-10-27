@@ -77,7 +77,7 @@ void
 entry_addUid(Entry **head)
 {
     Entry *tmp = *head;
-    int count = 0;
+    int count = 1;
 
     while (tmp != NULL) {
         tmp->uid = count;
@@ -127,6 +127,10 @@ Entry*
 entry_find(Entry *head, char *uid)
 {
     int uidInt = atoi(uid);
+    if (uidInt == 0) { // Error parsing
+        return NULL;
+    }
+
 
     if (uid == NULL) {
         fprintf(stderr, "entry_find: name == null\n");
