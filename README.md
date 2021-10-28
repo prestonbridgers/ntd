@@ -177,6 +177,7 @@ m -> Opens the mark entry menu
 
 - [] Allow the user to specify file in which to save the list
 - [] Add date field to the entries
+- [] Switch to the cmake build system for some sense of portability
 - [] Add support for multiple todo lists
     - [] Add menu for selecting todo list on startup and keypress (maybe 't')
     - [] Add a list of directories in which to look for todo lists
