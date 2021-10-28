@@ -29,7 +29,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/prestonbridgers/ntd">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="resources/logo.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">project_title</h3>
@@ -224,4 +224,4 @@ Project Link: [https://github.com/prestonbridgers/ntd](https://github.com/presto
 [issues-url]: https://github.com/prestonbridgers/ntd/issues
 [license-shield]: https://img.shields.io/github/license/prestonbridgers/ntd.svg?style=for-the-badge
 [license-url]: https://github.com/prestonbridgers/ntd/blob/master/LICENSE.txt
-[product-screenshot]: images/screenshot.png
+[product-screenshot]: resources/ntd_main_window.png
