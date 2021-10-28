@@ -217,7 +217,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Preston Bridgers - prestonbridgers@gmail.com@.com
+Preston Bridgers - prestonbridgers@gmail.com
 
 Project Link: [https://github.com/prestonbridgers/ntd](https://github.com/prestonbridgers/ntd)
 
