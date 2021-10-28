@@ -237,5 +237,5 @@ Project Link: [https://github.com/prestonbridgers/ntd](https://github.com/presto
 [issues-shield]: https://img.shields.io/github/issues/prestonbridgers/ntd.svg?style=for-the-badge
 [issues-url]: https://github.com/prestonbridgers/ntd/issues
 [license-shield]: https://img.shields.io/github/license/prestonbridgers/ntd.svg?style=for-the-badge
-[license-url]: https://github.com/prestonbridgers/ntd/blob/master/LICENSE.txt
+[license-url]: https://github.com/prestonbridgers/ntd/blob/master/LICENSE
 [product-screenshot]: resources/ntd_main_window.png
