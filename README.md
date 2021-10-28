@@ -35,7 +35,7 @@
 <h3 align="center">nCurses ToDo</h3>
 
   <p align="center">
-    project_description
+    A simple, lightweight todo list creation/management application
     <br />
     <a href="https://github.com/prestonbridgers/ntd"><strong>Explore the docs »</strong></a>
     <br />
@@ -65,7 +65,12 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li>
+      <a href="#usage">Usage</a>
+      <ul>
+        <li><a href="#keybinds">Keybinds</a></li>
+      </ul>
+    </li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -212,7 +217,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Preston Bridgers prestonbridgers@gmail.com@.com
+Preston Bridgers - prestonbridgers@gmail.com@.com
 
 Project Link: [https://github.com/prestonbridgers/ntd](https://github.com/prestonbridgers/ntd)
 
