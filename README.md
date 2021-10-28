@@ -40,8 +40,6 @@
     <a href="https://github.com/prestonbridgers/ntd"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/prestonbridgers/ntd">View Demo</a>
-    ·
     <a href="https://github.com/prestonbridgers/ntd/issues">Report Bug</a>
     ·
     <a href="https://github.com/prestonbridgers/ntd/issues">Request Feature</a>
@@ -72,7 +70,6 @@
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -83,7 +80,9 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email`, `email_client`, `project_title`, `project_description`
+`ntd` is a simple, lightweight todo list creation/management application.
+It boasts a very clean, minimal terminal user interface (TUI).
+The program is written in C and uses the nCurses library to handle the TUI.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -91,14 +90,7 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 ### Built With
 
-* [Next.js](https://nextjs.org/)
-* [React.js](https://reactjs.org/)
-* [Vue.js](https://vuejs.org/)
-* [Angular](https://angular.io/)
-* [Svelte](https://svelte.dev/)
-* [Laravel](https://laravel.com)
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
+* [nCurses](https://invisible-island.net/ncurses/ncurses.faq.html)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -107,32 +99,34 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+* nCurses
+* gcc
+* cMake
+
+These are very common packages, and can be easily googled to find the command
+to install them on your distribution of linux.
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
    git clone https://github.com/prestonbridgers/ntd.git
+   cd ntd
    ```
-3. Install NPM packages
+1. Create obj directory
    ```sh
-   npm install
+   mkdir obj
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+1. Compile the program
+   ```sh
+   make
    ```
+
+The compiled binary can be found in the `bin` folder.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -141,9 +135,33 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Simply run the `make run` command when in the root directory of the project or
+create a symbolic link from a directory in your `PATH` to the compiled binary
+found in `bin`.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+The program currently supports the following features:
+
+- Loading/saving a todo list from/to a file.
+- Adding/deleting entries
+- Marking entries as complete/incomplete
+
+Running the program automatically creates an `entries.txt` file
+in the current directory. On exit, the list is saved to that same file.
+
+To add/delete/mark an entry, press the appropriate key, type the number
+assigned to the entry, and press Enter.
+
+An attempt to delete or mark an entry number that doesn't exist, nothing will
+happen and you will be returned to the delete/mark window will close.
+
+### Keybinds
+
+```
+q -> Quits the program
+a -> Opens the add entry menu
+d -> Opens the delete entry menu
+m -> Opens the mark entry menu
+```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -152,10 +170,11 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [] Feature 1
-- [] Feature 2
-- [] Feature 3
-    - [] Nested Feature
+- [] Allow the user to specify file in which to save the list
+- [] Add date field to the entries
+- [] Add support for multiple todo lists
+    - [] Add menu for selecting todo list on startup and keypress (maybe 't')
+    - [] Add a list of directories in which to look for todo lists
 
 See the [open issues](https://github.com/prestonbridgers/ntd/issues) for a full list of proposed features (and known issues).
 
@@ -184,7 +203,7 @@ Don't forget to give the project a star! Thanks again!
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License. See `LICENSE` for more information.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -193,20 +212,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Preston Bridgers prestonbridgers@gmail.com@.com
 
 Project Link: [https://github.com/prestonbridgers/ntd](https://github.com/prestonbridgers/ntd)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
