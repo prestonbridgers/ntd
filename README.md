@@ -1,6 +1,7 @@
 # nCurses ToDo (ntd)
 
 ![GitHub file size in bytes](https://img.shields.io/github/size/prestonbridgers/ntd/bin/ntd?label=binary%20size)
+![GitHub](https://img.shields.io/github/license/prestonbridgers/ntd)
 
 ntd is a terminal based application for the creation and management of a todo list.
 The project is written in C and has very few dependencies.
