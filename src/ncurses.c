@@ -114,7 +114,7 @@ void
 window_form_draw(FormWindow *win)
 {
     if (win == NULL) {
-        fprintf(stderr, "draw_addForm: win == NULL");
+        /* fprintf(stderr, "draw_addForm: win == NULL"); */
         exit(1);
     }
 
@@ -137,11 +137,11 @@ void
 window_main_draw(MainWindow *win, char *s)
 {
     if (win == NULL) {
-        fprintf(stderr, "draw_entries: arg == NULL");
+        /* fprintf(stderr, "draw_entries: arg == NULL"); */
         exit(1);
     }
     if (s == NULL) {
-        fprintf(stderr, "draw_entries: s == NULL");
+        /* fprintf(stderr, "draw_entries: s == NULL"); */
         exit(1);
     }
 
@@ -166,12 +166,12 @@ void
 window_form_run(FormWindow *win, Entry **entries, short action)
 {
     if (win == NULL) {
-        fprintf(stderr, "form_add: arg == NULL\n");
+        /* fprintf(stderr, "form_add: arg == NULL\n"); */
         exit(1);
     }
 
     if (entries == NULL) {   
-        fprintf(stderr, "form_add: entries == NULL\n");
+        /* fprintf(stderr, "form_add: entries == NULL\n"); */
         exit(1);
     }
 

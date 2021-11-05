@@ -26,6 +26,19 @@ void curs_init()
     return;
 }
 
+/* Validates a filename given by the user.
+ *
+ * filename - The filename to be validated.
+ *
+ * return - 1 if filename is valid, 0 otherwise.
+ */
+short
+validate_filename(char *filename)
+{
+    //TODO: Write this function
+    return 1;
+}
+
 int main(int argc, char *argv[])
 {
     Entry *entries;
@@ -39,8 +52,17 @@ int main(int argc, char *argv[])
     char *title_del   = "Delete an entry";
     char *title_mark  = "Mark an entry";
     char *entries_str;
+    char *filename;
 
     curs_init();
+
+    // Get and validate the filename from args
+    if (argc > 1 && validate_filename(argv[1])) {
+        filename = argv[1];
+    }
+    else {
+        filename = "todo.txt";
+    }
 
     // Initializing the windows
     form_mark = window_form_create(title_mark);
@@ -50,7 +72,7 @@ int main(int argc, char *argv[])
     update_panels();
 
     // Fabricating todo list entries
-    entries = entry_load("entries.txt");
+    entries = entry_load(filename);
 
     // Printing the footer to stdscr
     mvprintw(LINES - 1, 1, footer_main);
@@ -99,7 +121,7 @@ int main(int argc, char *argv[])
 
     /* // After user is done modifying entries, save the state of the entries */
     /* // to a file */
-    entry_save(entries, "entries.txt");
+    entry_save(entries, filename);
 
     // Free things for the form window
     window_form_destroy(form_add);
@@ -109,6 +131,6 @@ int main(int argc, char *argv[])
     window_main_destroy(win_main);
     entry_destroy(entries);
     endwin();
-	return EXIT_SUCCESS;	
+	return EXIT_SUCCESS;
 }
 

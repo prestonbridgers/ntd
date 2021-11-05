@@ -12,7 +12,7 @@ char* trim_whitespace(char *str)
 {
     if (str == NULL)
     {
-        fprintf(stderr, "trim_whitespace: NULL string\n");
+        /* fprintf(stderr, "trim_whitespace: NULL string\n"); */
         exit(1);
     }
     char *end;

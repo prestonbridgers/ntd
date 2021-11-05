@@ -12,7 +12,7 @@ Entry*
 entry_create(char *name)
 {
     if (name == NULL) {
-        fprintf(stderr, "entry_create: name == null\n");
+        /* fprintf(stderr, "entry_create: name == null\n"); */
         exit(1);
     }
 
@@ -22,7 +22,7 @@ entry_create(char *name)
     entry->uid = -1;
     entry->next = NULL;
 
-    fprintf(stderr, "Created entry: %s\n", entry->name);
+    //fprintf(stderr, "Created entry: %s\n", entry->name);
 
     return entry;
 }
@@ -41,14 +41,14 @@ entry_load(char *filename)
     Entry *new;
 
     if (filename == NULL) {
-        fprintf(stderr, "entry_fromFile: filename == null\n");
+        //fprintf(stderr, "entry_fromFile: filename == null\n");
         exit(1);
     }
 
     file = fopen(filename, "r");
     if (file == NULL) {
-        fprintf(stderr, "File \"%s\" does not exist, creating it...\n",
-                filename);
+        /* fprintf(stderr, "File \"%s\" does not exist, creating it...\n", */
+        /*         filename); */
         file = fopen(filename, "w");
     }
 
@@ -96,7 +96,7 @@ void
 entry_save(Entry *head, char *filename)
 {
     if (filename == NULL) {
-        fprintf(stderr, "entry_toFile: filename == null\n");
+        /* fprintf(stderr, "entry_toFile: filename == null\n"); */
         exit(1);
     }
 
@@ -178,7 +178,7 @@ void
 entry_insert(Entry **head, Entry *e)
 {
     if (e == NULL) {
-        fprintf(stderr, "entry_insert: e == null\n");
+        /* fprintf(stderr, "entry_insert: e == null\n"); */
         exit(1);
     }
 
@@ -197,7 +197,7 @@ void
 entry_remove(Entry **head, char *uid)
 {
     if (uid == NULL) {
-        fprintf(stderr, "entry_remove: name == null\n");
+        /* fprintf(stderr, "entry_remove: name == null\n"); */
         exit(1);
     }
 
@@ -238,7 +238,7 @@ char*
 entry_stringize(char *dest, Entry *e)
 {
     if (e == NULL) {
-        fprintf(stderr, "entry_toString: e == NULL\n");
+        /* fprintf(stderr, "entry_toString: e == NULL\n"); */
         exit(1);
     }
 
