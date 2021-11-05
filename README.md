@@ -109,7 +109,6 @@ To get a local copy up and running follow these simple example steps.
 ### Prerequisites
 
 * nCurses
-* gcc
 * cMake
 
 These are very common packages, and can be easily googled to find the command
@@ -122,16 +121,19 @@ to install them on your distribution of linux.
    git clone https://github.com/prestonbridgers/ntd.git
    cd ntd
    ```
-1. Create obj directory
+1. Create a build directory
    ```sh
-   mkdir obj
+   mkdir build && cd build
    ```
-1. Compile the program
+1. Compile the program with cMake
    ```sh
-   make
+   cmake -S ../src -B .
+   cmake --build .
    ```
-
-The compiled binary can be found in the `bin` folder.
+1. Run the program
+   ```sh
+   ./ntd [filename]
+   ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -140,9 +142,10 @@ The compiled binary can be found in the `bin` folder.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Simply run the `make run` command when in the root directory of the project or
-create a symbolic link from a directory in your `PATH` to the compiled binary
-found in `bin`.
+```sh
+ntd [filename]
+  filename - Optional filename from/to which to load/save todo list entries (default: todo.txt)
+```
 
 The program currently supports the following features:
 
@@ -150,7 +153,7 @@ The program currently supports the following features:
 - Adding/deleting entries
 - Marking entries as complete/incomplete
 
-Running the program automatically creates an `entries.txt` file
+Running the program without arguments automatically creates a `todo.txt` file
 in the current directory. On exit, the list is saved to that same file.
 
 To add/delete/mark an entry, press the appropriate key, type the number
@@ -175,10 +178,10 @@ m -> Opens the mark entry menu
 <!-- ROADMAP -->
 ## Roadmap
 
-- [] Allow the user to specify file in which to save the list
+- [X] Allow the user to specify file in which to save the list
 - [] Add date field to the entries
-- [] Switch to the cmake build system for some sense of portability
-- [] Add support for multiple todo lists
+- [X] Switch to the cmake build system for some sense of portability
+- [X] Add support for multiple todo lists
     - [] Add menu for selecting todo list on startup and keypress (maybe 't')
     - [] Add a list of directories in which to look for todo lists
 
