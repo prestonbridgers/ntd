@@ -177,6 +177,7 @@ m -> Opens the mark entry menu
 
 - [] Allow the user to specify file in which to save the list
 - [] Add date field to the entries
+- [] Switch to the cmake build system for some sense of portability
 - [] Add support for multiple todo lists
     - [] Add menu for selecting todo list on startup and keypress (maybe 't')
     - [] Add a list of directories in which to look for todo lists
@@ -236,5 +237,5 @@ Project Link: [https://github.com/prestonbridgers/ntd](https://github.com/presto
 [issues-shield]: https://img.shields.io/github/issues/prestonbridgers/ntd.svg?style=for-the-badge
 [issues-url]: https://github.com/prestonbridgers/ntd/issues
 [license-shield]: https://img.shields.io/github/license/prestonbridgers/ntd.svg?style=for-the-badge
-[license-url]: https://github.com/prestonbridgers/ntd/blob/master/LICENSE.txt
+[license-url]: https://github.com/prestonbridgers/ntd/blob/master/LICENSE
 [product-screenshot]: resources/ntd_main_window.png
