@@ -5,7 +5,7 @@
 #include <panel.h>
 #include <form.h>
 
-#define MAX_ENTRY_NAME_SIZE 64
+#define MAX_ENTRY_NAME_SIZE 512
 #define MAX_WINDOW_NAME_SIZE 32
 
 #define ENTRY_INSERT 0
